@@ -9,7 +9,6 @@ interface Article {
   category: string;
   readTime: string;
   date: string;
-  views: string;
   featured?: boolean;
 }
 
@@ -19,7 +18,6 @@ const articles: Article[] = [
     category: 'AI',
     readTime: '5 min',
     date: '2025.04.09',
-    views: '0',
     featured: true,
   },
   {
@@ -27,14 +25,12 @@ const articles: Article[] = [
     category: 'Development',
     readTime: '4 min',
     date: '2025.03.12',
-    views: '0',
   },
   {
     title: 'Comment React 19 va simplifier votre vie de développeur Front-end',
     category: 'Development',
     readTime: '10 min',
     date: '2024.06.14',
-    views: '0',
   },
 ];
 
@@ -84,11 +80,10 @@ export default function ArticlesSection() {
               viewport={{ once: true }}
               transition={{ delay: index * 0.1 }}
               whileHover={{ x: 10 }}
-              className={`glass rounded-xl p-6 border transition-all duration-300 cursor-pointer relative overflow-hidden ${
-                article.featured
-                  ? 'border-[#FF00AA] box-glow-magenta'
-                  : 'border-[#00FFFF]/20 hover:border-[#00FFFF] hover:box-glow-cyan'
-              }`}
+              className={`glass rounded-xl p-6 border transition-all duration-300 cursor-pointer relative overflow-hidden ${article.featured
+                ? 'border-[#FF00AA] box-glow-magenta'
+                : 'border-[#00FFFF]/20 hover:border-[#00FFFF] hover:box-glow-cyan'
+                }`}
             >
               {/* Featured Badge */}
               {article.featured && (
@@ -112,7 +107,7 @@ export default function ArticlesSection() {
                     </span>
                   </div>
 
-                  {/* Title — kept in French per spec */}
+                  {/* Title */}
                   <h4 className="font-display text-2xl font-bold text-white mb-2 hover:text-gradient-cyan-magenta transition-all">
                     {article.title}
                   </h4>
@@ -122,11 +117,6 @@ export default function ArticlesSection() {
                     <span>[ {article.date} ]</span>
                     <span>•</span>
                     <span>{t.articles.readTime(article.readTime)}</span>
-                    <span>•</span>
-                    <div className="flex items-center space-x-1">
-                      <span>{t.articles.signalStrength}</span>
-                      <span className="text-[#00FF66]">{article.views} views</span>
-                    </div>
                   </div>
                 </div>
 
