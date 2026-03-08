@@ -1,10 +1,19 @@
 'use client';
 
-import { useState, useTransition } from 'react';
+import { useState, useEffect, useTransition } from 'react';
 import { motion } from 'motion/react';
 import { Send, Check, AlertTriangle } from 'lucide-react';
+import Script from 'next/script';
 import { sendMessage } from '@/app/actions';
 import { useTranslations } from '@/contexts/LanguageContext';
+
+declare global {
+  interface Window {
+    grecaptcha: {
+      execute(siteKey: string, options: { action: string }): Promise<string>;
+    };
+  }
+}
 
 export default function ContactSection() {
   const t = useTranslations();
@@ -12,12 +21,21 @@ export default function ContactSection() {
   const [submitted, setSubmitted] = useState(false);
   const [error, setError] = useState(false);
   const [isPending, startTransition] = useTransition();
+  const [siteKey, setSiteKey] = useState<string | null>(null);
+
+  useEffect(() => {
+    fetch('/api/config')
+      .then((r) => r.json())
+      .then((cfg) => setSiteKey(cfg.recaptchaSiteKey));
+  }, []);
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    if (!siteKey) return;
     setError(false);
     startTransition(async () => {
-      const result = await sendMessage(message);
+      const token = await window.grecaptcha.execute(siteKey, { action: 'submit_form' });
+      const result = await sendMessage(message, token);
       if (result.success) {
         setSubmitted(true);
         setMessage('');
@@ -54,61 +72,69 @@ export default function ContactSection() {
           className="glass-strong rounded-xl p-8 border border-[#00FFFF]/20 scanlines"
         >
           {!submitted ? (
-            <form onSubmit={handleSubmit} className="space-y-6">
-              {/* Terminal Prompt */}
-              <div className="font-terminal text-[#00FFFF] mb-4">
-                {t.contact.prompt}
-              </div>
-
-              {/* Message Input */}
-              <div className="relative">
-                <textarea
-                  value={message}
-                  onChange={(e) => setMessage(e.target.value)}
-                  placeholder={t.contact.placeholder}
-                  rows={6}
-                  className="w-full bg-[#1a1a1a] border border-[#00FFFF]/30 rounded-lg px-4 py-3 text-[#E8E8E8] font-terminal text-sm focus:outline-none focus:border-[#00FFFF] transition-all resize-none"
-                  required
+            <>
+              {siteKey && (
+                <Script
+                  src={`https://www.google.com/recaptcha/api.js?render=${siteKey}`}
+                  strategy="afterInteractive"
                 />
-              </div>
-
-              {/* Submit Button */}
-              <motion.button
-                type="submit"
-                disabled={isPending}
-                whileHover={isPending ? {} : { scale: 1.02 }}
-                whileTap={isPending ? {} : { scale: 0.98 }}
-                className="w-full font-terminal text-lg px-8 py-4 bg-transparent border-2 border-[#00FFFF] text-[#00FFFF] rounded-lg hover:bg-[#00FFFF] hover:text-[#0D0D0D] box-glow-cyan transition-all duration-300 flex items-center justify-center space-x-2 disabled:opacity-50 disabled:cursor-not-allowed"
-              >
-                <Send className={`w-5 h-5 ${isPending ? 'animate-pulse' : ''}`} />
-                <span>{isPending ? t.contact.transmitting : t.contact.transmit}</span>
-              </motion.button>
-
-              {/* Error Message */}
-              {error && (
-                <motion.div
-                  initial={{ opacity: 0, y: -8 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  className="flex items-center space-x-2 font-terminal text-sm text-[#FF00AA]"
-                >
-                  <AlertTriangle className="w-4 h-4 shrink-0" />
-                  <span>{t.contact.error}</span>
-                </motion.div>
               )}
+              <form onSubmit={handleSubmit} className="space-y-6">
+                {/* Terminal Prompt */}
+                <div className="font-terminal text-[#00FFFF] mb-4">
+                  {t.contact.prompt}
+                </div>
 
-              {/* Alternative Contact */}
-              <div className="text-center pt-6 border-t border-[#00FFFF]/20">
-                <p className="font-terminal text-sm text-[#888888] mb-2">
-                  {t.contact.orContact}
-                </p>
-                <a
-                  href="mailto:lucas.macori@gmail.com"
-                  className="font-terminal text-[#00FFFF] hover:text-[#FF00AA] transition-colors glow-cyan"
+                {/* Message Input */}
+                <div className="relative">
+                  <textarea
+                    value={message}
+                    onChange={(e) => setMessage(e.target.value)}
+                    placeholder={t.contact.placeholder}
+                    rows={6}
+                    className="w-full bg-[#1a1a1a] border border-[#00FFFF]/30 rounded-lg px-4 py-3 text-[#E8E8E8] font-terminal text-sm focus:outline-none focus:border-[#00FFFF] transition-all resize-none"
+                    required
+                  />
+                </div>
+
+                {/* Submit Button */}
+                <motion.button
+                  type="submit"
+                  disabled={isPending || !siteKey}
+                  whileHover={isPending ? {} : { scale: 1.02 }}
+                  whileTap={isPending ? {} : { scale: 0.98 }}
+                  className="w-full font-terminal text-lg px-8 py-4 bg-transparent border-2 border-[#00FFFF] text-[#00FFFF] rounded-lg hover:bg-[#00FFFF] hover:text-[#0D0D0D] box-glow-cyan transition-all duration-300 flex items-center justify-center space-x-2 disabled:opacity-50 disabled:cursor-not-allowed"
                 >
-                  lucas.macori@gmail.com
-                </a>
-              </div>
-            </form>
+                  <Send className={`w-5 h-5 ${isPending ? 'animate-pulse' : ''}`} />
+                  <span>{isPending ? t.contact.transmitting : t.contact.transmit}</span>
+                </motion.button>
+
+                {/* Error Message */}
+                {error && (
+                  <motion.div
+                    initial={{ opacity: 0, y: -8 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    className="flex items-center space-x-2 font-terminal text-sm text-[#FF00AA]"
+                  >
+                    <AlertTriangle className="w-4 h-4 shrink-0" />
+                    <span>{t.contact.error}</span>
+                  </motion.div>
+                )}
+
+                {/* Alternative Contact */}
+                <div className="text-center pt-6 border-t border-[#00FFFF]/20">
+                  <p className="font-terminal text-sm text-[#888888] mb-2">
+                    {t.contact.orContact}
+                  </p>
+                  <a
+                    href="mailto:lucas.macori@gmail.com"
+                    className="font-terminal text-[#00FFFF] hover:text-[#FF00AA] transition-colors glow-cyan"
+                  >
+                    lucas.macori@gmail.com
+                  </a>
+                </div>
+              </form>
+            </>
           ) : (
             <motion.div
               initial={{ opacity: 0, scale: 0.9 }}

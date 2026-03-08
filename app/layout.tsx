@@ -1,6 +1,7 @@
 import type { Metadata } from 'next';
 import '../styles/globals.css';
 import Providers from '@/components/Providers';
+import FirebaseGuard from '@/guards/firebaseGuard';
 
 const BASE_URL = 'https://lucasmacori.fr';
 const TITLE = 'Lucas Macori | Full-Stack Developer';
@@ -104,7 +105,9 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         />
       </head>
       <body>
-        <Providers>{children}</Providers>
+        <FirebaseGuard>
+          <Providers>{children}</Providers>
+        </FirebaseGuard>
       </body>
     </html>
   );
