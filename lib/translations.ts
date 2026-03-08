@@ -108,6 +108,11 @@ const en = {
     bestTimes: 'Best times to reach me (CET/Paris time):',
     weekdayResponse: 'Most responsive during weekdays, 9AM - 6PM',
     days: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
+    recaptchaNotice: 'This site is protected by reCAPTCHA and the Google',
+    recaptchaPrivacy: 'Privacy Policy',
+    recaptchaAnd: 'and',
+    recaptchaTerms: 'Terms of Service',
+    recaptchaApply: 'apply.',
   },
   footer: {
     builtWith: 'Built with React and',
@@ -223,6 +228,11 @@ const fr: typeof en = {
     bestTimes: 'Meilleurs créneaux pour me contacter (heure de Paris) :',
     weekdayResponse: 'Réactivité maximale en semaine, de 9h à 18h',
     days: ['Lun', 'Mar', 'Mer', 'Jeu', 'Ven', 'Sam', 'Dim'],
+    recaptchaNotice: 'Ce site est protégé par reCAPTCHA et la',
+    recaptchaPrivacy: 'Politique de confidentialité',
+    recaptchaAnd: 'et les',
+    recaptchaTerms: "Conditions d'utilisation",
+    recaptchaApply: "de Google s'appliquent.",
   },
   footer: {
     builtWith: 'Développé avec React et',

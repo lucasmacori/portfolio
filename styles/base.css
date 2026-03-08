@@ -17,6 +17,11 @@
   }
 }
 
+/* Hide reCAPTCHA floating badge (attribution shown inline in form) */
+.grecaptcha-badge {
+  visibility: hidden !important;
+}
+
 /* Scrollbar */
 ::-webkit-scrollbar {
   width: 8px;

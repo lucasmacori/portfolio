@@ -109,6 +109,29 @@ export default function ContactSection() {
                   <span>{isPending ? t.contact.transmitting : t.contact.transmit}</span>
                 </motion.button>
 
+                {/* reCAPTCHA attribution */}
+                <p className="font-terminal text-xs text-[#555555] text-center">
+                  {t.contact.recaptchaNotice}{' '}
+                  <a
+                    href="https://policies.google.com/privacy"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="underline hover:text-[#888888] transition-colors"
+                  >
+                    {t.contact.recaptchaPrivacy}
+                  </a>{' '}
+                  {t.contact.recaptchaAnd}{' '}
+                  <a
+                    href="https://policies.google.com/terms"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="underline hover:text-[#888888] transition-colors"
+                  >
+                    {t.contact.recaptchaTerms}
+                  </a>{' '}
+                  {t.contact.recaptchaApply}
+                </p>
+
                 {/* Error Message */}
                 {error && (
                   <motion.div
