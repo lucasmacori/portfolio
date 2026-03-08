@@ -2,6 +2,7 @@
 
 import { motion } from 'motion/react';
 import { Radio, TrendingUp } from 'lucide-react';
+import { useTranslations } from '@/contexts/LanguageContext';
 
 interface Article {
   title: string;
@@ -14,7 +15,7 @@ interface Article {
 
 const articles: Article[] = [
   {
-    title: 'Qu\'est ce que le Vibe coding ?',
+    title: "Qu'est ce que le Vibe coding ?",
     category: 'AI',
     readTime: '5 min',
     date: '2025.04.09',
@@ -38,6 +39,8 @@ const articles: Article[] = [
 ];
 
 export default function ArticlesSection() {
+  const t = useTranslations();
+
   const getCategoryColor = (category: string) => {
     switch (category.toLowerCase()) {
       case 'development':
@@ -64,10 +67,10 @@ export default function ArticlesSection() {
           className="mb-16"
         >
           <h2 className="font-terminal text-[#00FFFF] text-xl mb-2 glow-cyan">
-            &gt; cat ~/transmissions
+            {t.articles.command}
           </h2>
           <h3 className="font-display text-5xl md:text-6xl font-black text-white">
-            INCOMING <span className="text-gradient-magenta-purple">SIGNALS</span>
+            {t.articles.title} <span className="text-gradient-magenta-purple">{t.articles.titleAccent}</span>
           </h3>
         </motion.div>
 
@@ -81,10 +84,11 @@ export default function ArticlesSection() {
               viewport={{ once: true }}
               transition={{ delay: index * 0.1 }}
               whileHover={{ x: 10 }}
-              className={`glass rounded-xl p-6 border transition-all duration-300 cursor-pointer relative overflow-hidden ${article.featured
+              className={`glass rounded-xl p-6 border transition-all duration-300 cursor-pointer relative overflow-hidden ${
+                article.featured
                   ? 'border-[#FF00AA] box-glow-magenta'
                   : 'border-[#00FFFF]/20 hover:border-[#00FFFF] hover:box-glow-cyan'
-                }`}
+              }`}
             >
               {/* Featured Badge */}
               {article.featured && (
@@ -108,7 +112,7 @@ export default function ArticlesSection() {
                     </span>
                   </div>
 
-                  {/* Title */}
+                  {/* Title — kept in French per spec */}
                   <h4 className="font-display text-2xl font-bold text-white mb-2 hover:text-gradient-cyan-magenta transition-all">
                     {article.title}
                   </h4>
@@ -117,10 +121,10 @@ export default function ArticlesSection() {
                   <div className="flex flex-wrap items-center gap-4 font-terminal text-xs text-[#888888]">
                     <span>[ {article.date} ]</span>
                     <span>•</span>
-                    <span>{article.readTime} read</span>
+                    <span>{t.articles.readTime(article.readTime)}</span>
                     <span>•</span>
                     <div className="flex items-center space-x-1">
-                      <span>Signal strength:</span>
+                      <span>{t.articles.signalStrength}</span>
                       <span className="text-[#00FF66]">{article.views} views</span>
                     </div>
                   </div>
@@ -128,7 +132,7 @@ export default function ArticlesSection() {
 
                 {/* Reading Progress Bar */}
                 <div className="md:w-32">
-                  <div className="font-terminal text-xs text-[#888888] mb-2">Progress</div>
+                  <div className="font-terminal text-xs text-[#888888] mb-2">{t.articles.progress}</div>
                   <div className="w-full bg-[#1a1a1a] rounded-full h-2">
                     <motion.div
                       initial={{ width: 0 }}
@@ -157,9 +161,9 @@ export default function ArticlesSection() {
             target="_blank"
             rel="noopener noreferrer"
             className="font-terminal text-[#00FFFF] hover:text-[#FF00AA] transition-colors border border-[#00FFFF]/30 hover:border-[#FF00AA] px-6 py-3 rounded-lg inline-block"
-            aria-label="View all articles by Lucas on sfeir.dev (opens in a new tab)"
+            aria-label={t.articles.viewAllLabel}
           >
-            [ VIEW ALL ARTICLES ] →
+            {t.articles.viewAll}
           </a>
         </motion.div>
       </div>

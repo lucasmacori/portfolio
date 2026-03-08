@@ -3,13 +3,13 @@
 import { motion } from 'motion/react';
 import { Github, Linkedin, Mail, FileText } from 'lucide-react';
 import type { ComponentType } from 'react';
+import { useTranslations } from '@/contexts/LanguageContext';
 
 interface NetworkNode {
   name: string;
   icon: ComponentType<{ className?: string; style?: React.CSSProperties }>;
   url: string;
   color: string;
-  description: string;
   activity?: string;
 }
 
@@ -19,15 +19,13 @@ const nodes: NetworkNode[] = [
     icon: Github,
     url: 'https://github.com/lucasmacori',
     color: '#00FFFF',
-    description: 'Central hub for all projects',
-    activity: '142 contributions this year',
+    activity: 'placeholder',
   },
   {
     name: 'LinkedIn',
     icon: Linkedin,
     url: 'https://linkedin.com/in/lucas-macori-56b445223',
     color: '#FF00AA',
-    description: 'Professional network',
     activity: 'Active daily',
   },
   {
@@ -35,7 +33,6 @@ const nodes: NetworkNode[] = [
     icon: Mail,
     url: 'mailto:lucas.macori@gmail.com',
     color: '#00FF66',
-    description: 'lucas.macori@gmail.com',
     activity: 'Response time: < 24h',
   },
   {
@@ -43,12 +40,13 @@ const nodes: NetworkNode[] = [
     icon: FileText,
     url: 'https://sfeir.dev/author/lucas/',
     color: '#9945FF',
-    description: 'Technical articles & insights',
     activity: 'Published at sfeir.dev',
   },
 ];
 
 export default function NetworkSection({ publicRepos }: { publicRepos: number | null }) {
+  const t = useTranslations();
+
   return (
     <section id="network" className="relative py-24 px-4 sm:px-6 lg:px-8 min-h-screen flex items-center">
       <div className="max-w-7xl mx-auto w-full">
@@ -60,10 +58,10 @@ export default function NetworkSection({ publicRepos }: { publicRepos: number | 
           className="mb-16 text-center"
         >
           <h2 className="font-terminal text-[#00FFFF] text-xl mb-2 glow-cyan">
-            &gt; netstat
+            {t.network.command}
           </h2>
           <h3 className="font-display text-5xl md:text-6xl font-black text-white">
-            NETWORK <span className="text-gradient-magenta-purple">NODES</span>
+            {t.network.title} <span className="text-gradient-magenta-purple">{t.network.titleAccent}</span>
           </h3>
         </motion.div>
 
@@ -137,7 +135,7 @@ export default function NetworkSection({ publicRepos }: { publicRepos: number | 
                         <div>
                           <h4 className="font-display text-xl font-bold text-white">{node.name}</h4>
                           <div className="font-terminal text-xs" style={{ color: node.color }}>
-                            ACTIVE
+                            {t.network.active}
                           </div>
                         </div>
                       </div>
@@ -152,7 +150,9 @@ export default function NetworkSection({ publicRepos }: { publicRepos: number | 
                     </div>
 
                     {/* Description */}
-                    <p className="font-body text-sm text-[#E8E8E8] mb-3">{node.description}</p>
+                    <p className="font-body text-sm text-[#E8E8E8] mb-3">
+                      {t.network.nodeDescriptions[node.name] ?? ''}
+                    </p>
 
                     {/* Activity */}
                     {node.activity && (
@@ -201,7 +201,7 @@ export default function NetworkSection({ publicRepos }: { publicRepos: number | 
           className="mt-16 text-center"
         >
           <p className="font-body text-[#E8E8E8]">
-            Based in <span className="text-[#00FFFF]">Lille 🍺, France 🥐</span>
+            {t.network.location} <span className="text-[#00FFFF]">{t.network.locationValue}</span>
           </p>
         </motion.div>
       </div>

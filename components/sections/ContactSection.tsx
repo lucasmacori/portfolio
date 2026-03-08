@@ -4,14 +4,16 @@ import { useState, useTransition } from 'react';
 import { motion } from 'motion/react';
 import { Send, Check, AlertTriangle } from 'lucide-react';
 import { sendMessage } from '@/app/actions';
+import { useTranslations } from '@/contexts/LanguageContext';
 
 export default function ContactSection() {
+  const t = useTranslations();
   const [message, setMessage] = useState('');
   const [submitted, setSubmitted] = useState(false);
   const [error, setError] = useState(false);
   const [isPending, startTransition] = useTransition();
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setError(false);
     startTransition(async () => {
@@ -37,10 +39,10 @@ export default function ContactSection() {
           className="mb-16 text-center"
         >
           <h2 className="font-terminal text-[#00FFFF] text-xl mb-2 glow-cyan">
-            &gt; ssh lucas@contact
+            {t.contact.command}
           </h2>
           <h3 className="font-display text-5xl md:text-6xl font-black text-white">
-            ESTABLISH <span className="text-gradient-cyan-magenta">CONNECTION</span>
+            {t.contact.title} <span className="text-gradient-cyan-magenta">{t.contact.titleAccent}</span>
           </h3>
         </motion.div>
 
@@ -55,7 +57,7 @@ export default function ContactSection() {
             <form onSubmit={handleSubmit} className="space-y-6">
               {/* Terminal Prompt */}
               <div className="font-terminal text-[#00FFFF] mb-4">
-                visitor@portfolio:~$
+                {t.contact.prompt}
               </div>
 
               {/* Message Input */}
@@ -63,7 +65,7 @@ export default function ContactSection() {
                 <textarea
                   value={message}
                   onChange={(e) => setMessage(e.target.value)}
-                  placeholder="Type your message..."
+                  placeholder={t.contact.placeholder}
                   rows={6}
                   className="w-full bg-[#1a1a1a] border border-[#00FFFF]/30 rounded-lg px-4 py-3 text-[#E8E8E8] font-terminal text-sm focus:outline-none focus:border-[#00FFFF] transition-all resize-none"
                   required
@@ -79,7 +81,7 @@ export default function ContactSection() {
                 className="w-full font-terminal text-lg px-8 py-4 bg-transparent border-2 border-[#00FFFF] text-[#00FFFF] rounded-lg hover:bg-[#00FFFF] hover:text-[#0D0D0D] box-glow-cyan transition-all duration-300 flex items-center justify-center space-x-2 disabled:opacity-50 disabled:cursor-not-allowed"
               >
                 <Send className={`w-5 h-5 ${isPending ? 'animate-pulse' : ''}`} />
-                <span>{isPending ? '[ TRANSMITTING... ]' : '[ TRANSMIT ]'}</span>
+                <span>{isPending ? t.contact.transmitting : t.contact.transmit}</span>
               </motion.button>
 
               {/* Error Message */}
@@ -90,14 +92,14 @@ export default function ContactSection() {
                   className="flex items-center space-x-2 font-terminal text-sm text-[#FF00AA]"
                 >
                   <AlertTriangle className="w-4 h-4 shrink-0" />
-                  <span>Transmission failed. Try reaching out directly by email.</span>
+                  <span>{t.contact.error}</span>
                 </motion.div>
               )}
 
               {/* Alternative Contact */}
               <div className="text-center pt-6 border-t border-[#00FFFF]/20">
                 <p className="font-terminal text-sm text-[#888888] mb-2">
-                  Or reach out directly:
+                  {t.contact.orContact}
                 </p>
                 <a
                   href="mailto:lucas.macori@gmail.com"
@@ -122,10 +124,10 @@ export default function ContactSection() {
                 <Check className="w-10 h-10 text-[#00FF66]" />
               </motion.div>
               <h4 className="font-display text-2xl font-bold text-white mb-2">
-                CONNECTION ESTABLISHED ✓
+                {t.contact.successTitle}
               </h4>
               <p className="font-terminal text-[#00FF66]">
-                Message transmitted successfully. I&apos;ll respond within 24 hours.
+                {t.contact.successMessage}
               </p>
             </motion.div>
           )}
@@ -140,10 +142,10 @@ export default function ContactSection() {
           className="mt-12 glass rounded-xl p-6 border border-[#00FFFF]/20"
         >
           <h4 className="font-terminal text-sm text-[#888888] mb-4">
-            Best times to reach me (CET/Paris time):
+            {t.contact.bestTimes}
           </h4>
           <div className="grid grid-cols-7 gap-2">
-            {['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'].map((day, i) => (
+            {t.contact.days.map((day, i) => (
               <div key={day} className="text-center">
                 <div className="font-terminal text-xs text-[#888888] mb-2">{day}</div>
                 <div
@@ -157,7 +159,7 @@ export default function ContactSection() {
             ))}
           </div>
           <p className="font-terminal text-xs text-[#888888] mt-4 text-center">
-            Most responsive during weekdays, 9AM - 6PM
+            {t.contact.weekdayResponse}
           </p>
         </motion.div>
       </div>

@@ -3,11 +3,13 @@
 import { useState, useEffect } from 'react';
 import { motion } from 'motion/react';
 import { Menu, X } from 'lucide-react';
+import { useLanguage } from '@/contexts/LanguageContext';
 
 export default function Navigation() {
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [activeSection, setActiveSection] = useState('');
+  const { lang, setLang } = useLanguage();
 
   useEffect(() => {
     const handleScroll = () => {
@@ -44,6 +46,26 @@ export default function Navigation() {
     { id: 'resume', label: '/resume' },
     { id: 'network', label: '/network' },
   ];
+
+  const LangToggle = () => (
+    <div className="flex items-center space-x-1 font-terminal text-sm">
+      <button
+        onClick={() => setLang('en')}
+        aria-label="Switch to English"
+        className={`px-1 transition-colors duration-200 ${lang === 'en' ? 'text-[#00FFFF] glow-cyan' : 'text-[#888888] hover:text-[#E8E8E8]'}`}
+      >
+        EN
+      </button>
+      <span className="text-[#444444]">|</span>
+      <button
+        onClick={() => setLang('fr')}
+        aria-label="Passer en français"
+        className={`px-1 transition-colors duration-200 ${lang === 'fr' ? 'text-[#00FFFF] glow-cyan' : 'text-[#888888] hover:text-[#E8E8E8]'}`}
+      >
+        FR
+      </button>
+    </div>
+  );
 
   return (
     <>
@@ -85,15 +107,19 @@ export default function Navigation() {
                   )}
                 </button>
               ))}
+              <LangToggle />
             </div>
 
-            {/* Mobile Menu Button */}
-            <button
-              onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-              className="md:hidden text-[#00FFFF] hover:text-[#FF00AA] transition-colors"
-            >
-              {isMobileMenuOpen ? <X size={24} /> : <Menu size={24} />}
-            </button>
+            {/* Mobile: lang toggle + hamburger */}
+            <div className="md:hidden flex items-center space-x-4">
+              <LangToggle />
+              <button
+                onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+                className="text-[#00FFFF] hover:text-[#FF00AA] transition-colors"
+              >
+                {isMobileMenuOpen ? <X size={24} /> : <Menu size={24} />}
+              </button>
+            </div>
           </div>
         </div>
       </motion.nav>

@@ -4,8 +4,10 @@ import { useState, useEffect } from 'react';
 import { motion } from 'motion/react';
 import { ChevronDown } from 'lucide-react';
 import Image from 'next/image';
+import { useTranslations } from '@/contexts/LanguageContext';
 
 export default function HeroSection() {
+  const t = useTranslations();
   const [bootComplete, setBootComplete] = useState(false);
   const [displayedText, setDisplayedText] = useState('');
   const fullCommand = '$ lucas --explore';
@@ -27,30 +29,30 @@ export default function HeroSection() {
 
   const techBadges = ['Java', 'TypeScript', 'React', 'SpringBoot', 'Kubernetes', 'NextJS'];
 
+  const symbols = ['{}', '[]', '()', '<>', '/>', '::'];
+  const [particles] = useState(() =>
+    Array.from({ length: 20 }, () => ({
+      x: Math.random() * 1000,
+      y: Math.random() * 1000,
+      endY: Math.random() * 1000,
+      duration: 10 + Math.random() * 10,
+      symbol: symbols[Math.floor(Math.random() * symbols.length)],
+    }))
+  );
+
   return (
     <section id="hero" className="relative min-h-screen flex items-center justify-center overflow-hidden circuit-bg">
       {/* Floating Code Particles Background */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
-        {[...Array(20)].map((_, i) => (
+        {particles.map((p, i) => (
           <motion.div
             key={i}
-            initial={{
-              x: Math.random() * 1000,
-              y: Math.random() * 1000,
-              opacity: 0.1,
-            }}
-            animate={{
-              y: [null, Math.random() * 1000],
-              opacity: [0.1, 0.3, 0.1],
-            }}
-            transition={{
-              duration: 10 + Math.random() * 10,
-              repeat: Infinity,
-              ease: 'linear',
-            }}
+            initial={{ x: p.x, y: p.y, opacity: 0.1 }}
+            animate={{ y: [null, p.endY], opacity: [0.1, 0.3, 0.1] }}
+            transition={{ duration: p.duration, repeat: Infinity, ease: 'linear' }}
             className="absolute font-terminal text-[#00FFFF]"
           >
-            {['{}', '[]', '()', '<>', '/>', '::'][Math.floor(Math.random() * 6)]}
+            {p.symbol}
           </motion.div>
         ))}
       </div>
@@ -119,7 +121,7 @@ export default function HeroSection() {
                 transition={{ delay: 0.8 }}
                 className="font-display text-2xl sm:text-3xl md:text-4xl mb-2 glow-cyan"
               >
-                Full-Stack Developer<span className="terminal-cursor ml-1"></span>
+                {t.hero.subtitle}<span className="terminal-cursor ml-1"></span>
               </motion.div>
 
               {/* Floating Tech Badges */}
@@ -156,7 +158,7 @@ export default function HeroSection() {
                 }}
                 className="font-terminal text-lg px-8 py-4 bg-transparent border-2 border-[#00FFFF] text-[#00FFFF] rounded-lg hover:bg-[#00FFFF] hover:text-[#0D0D0D] box-glow-cyan transition-all duration-300"
               >
-                [ ENTER PORTFOLIO ]
+                {t.hero.cta}
               </motion.button>
             </motion.div>
           </motion.div>

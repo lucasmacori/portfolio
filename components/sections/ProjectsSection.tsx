@@ -2,10 +2,11 @@
 
 import { motion } from 'motion/react';
 import { ExternalLink } from 'lucide-react';
+import { useTranslations } from '@/contexts/LanguageContext';
 
 interface Project {
   title: string;
-  description: string;
+  translationKey: string;
   tech: string[];
   metrics: { label: string; value: string }[];
   status: 'live' | 'in-progress' | 'archived';
@@ -15,27 +16,23 @@ interface Project {
 const projects: Project[] = [
   {
     title: 'Portfolio',
-    description: "The very site you're browsing — built with Next.js, Tailwind CSS and Framer Motion. Source open on GitHub.",
+    translationKey: 'portfolio',
     tech: ['Next.js', 'TypeScript', 'Tailwind CSS', 'Framer Motion'],
-    metrics: [
-      { label: 'Type', value: 'This site' },
-    ],
+    metrics: [{ label: 'Type', value: 'This site' }],
     status: 'live',
     link: 'https://github.com/lucasmacori/portfolio',
   },
   {
     title: 'Phrase Auto-Translate',
-    description: 'Fetches untranslated keys from PhraseApp, automatically translates them with DeepL, and pushes them back — fully automated i18n workflow.',
+    translationKey: 'phraseAutoTranslate',
     tech: ['JavaScript', 'DeepL API', 'PhraseApp'],
-    metrics: [
-      { label: 'Type', value: 'Tool' },
-    ],
+    metrics: [{ label: 'Type', value: 'Tool' }],
     status: 'live',
     link: 'https://github.com/lucasmacori/phrase-app-auto-translate',
   },
   {
     title: 'ng-minesweeper',
-    description: 'Classic Minesweeper game built with Angular — fully playable in the browser with customizable grid size and mine count.',
+    translationKey: 'ngMinesweeper',
     tech: ['Angular', 'TypeScript'],
     metrics: [
       { label: 'Type', value: 'Game' },
@@ -46,17 +43,17 @@ const projects: Project[] = [
   },
   {
     title: 'Dotfiles',
-    description: 'All the configuration for the goodies I use on a daily basis — shell, editor, window manager and more.',
+    translationKey: 'dotfiles',
     tech: ['Fish', 'QML', 'Shell'],
-    metrics: [
-      { label: 'Type', value: 'Rizz' },
-    ],
+    metrics: [{ label: 'Type', value: 'Rizz' }],
     status: 'live',
     link: 'https://github.com/lucasmacori/dotfiles',
   },
 ];
 
 export default function ProjectsSection() {
+  const t = useTranslations();
+
   const getStatusColor = (status: string) => {
     switch (status) {
       case 'live':
@@ -81,10 +78,10 @@ export default function ProjectsSection() {
           className="mb-16"
         >
           <h2 className="font-terminal text-[#00FFFF] text-xl mb-2 glow-cyan">
-            &gt; ls ~/projects
+            {t.projects.command}
           </h2>
           <h3 className="font-display text-5xl md:text-6xl font-black text-white">
-            THE <span className="text-gradient-cyan-magenta">LAB</span>
+            {t.projects.title} <span className="text-gradient-cyan-magenta">{t.projects.titleAccent}</span>
           </h3>
         </motion.div>
 
@@ -109,7 +106,7 @@ export default function ProjectsSection() {
                 <span
                   className={`font-terminal text-xs px-3 py-1 rounded-full border ${getStatusColor(project.status)}`}
                 >
-                  {project.status.toUpperCase()}
+                  {t.projects.status[project.status] ?? project.status.toUpperCase()}
                 </span>
                 <ExternalLink className="w-5 h-5 text-[#00FFFF] opacity-0 group-hover:opacity-100 transition-opacity" />
               </div>
@@ -121,7 +118,7 @@ export default function ProjectsSection() {
 
               {/* Description */}
               <p className="font-body text-[#E8E8E8] text-sm mb-4 leading-relaxed">
-                {project.description}
+                {t.projects.descriptions[project.translationKey] ?? ''}
               </p>
 
               {/* Tech Stack */}

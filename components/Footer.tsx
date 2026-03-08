@@ -1,9 +1,11 @@
 'use client';
 
 import { motion } from 'motion/react';
-import { Coffee, Music } from 'lucide-react';
+import { Coffee } from 'lucide-react';
+import { useTranslations } from '@/contexts/LanguageContext';
 
 export default function Footer({ version }: { version: string }) {
+  const t = useTranslations();
   return (
     <footer className="relative py-12 px-4 sm:px-6 lg:px-8 border-t border-[#00FFFF]/20">
       <div className="max-w-7xl mx-auto">
@@ -16,7 +18,7 @@ export default function Footer({ version }: { version: string }) {
             className="text-center md:text-left"
           >
             <p className="font-body text-sm text-[#E8E8E8] flex items-center justify-center md:justify-start space-x-2">
-              <span>Built with React and</span>
+              <span>{t.footer.builtWith}</span>
               <Coffee className="w-4 h-4 text-[#FF6B00]" />
             </p>
           </motion.div>
@@ -30,7 +32,7 @@ export default function Footer({ version }: { version: string }) {
             className="text-center"
           >
             <p className="font-terminal text-xs text-[#888888]">
-              It looks like you have reached the end of this website
+              {t.footer.endOfSite}
             </p>
           </motion.div>
 

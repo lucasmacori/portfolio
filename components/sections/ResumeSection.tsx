@@ -2,74 +2,50 @@
 
 import { motion } from 'motion/react';
 import { Briefcase, Download, Award } from 'lucide-react';
+import { useTranslations } from '@/contexts/LanguageContext';
 
 interface TimelineNode {
+  key: string;
   year: string;
   role: string;
   company: string;
-  achievements: string[];
   tech: string[];
 }
 
 const timeline: TimelineNode[] = [
   {
+    key: 'sfeir',
     year: '2024–Present',
     role: 'Lead Full-Stack Developer',
     company: 'SFEIR',
-    achievements: [
-      'Development and maintenance of Java micro-services using SpringBoot and Terraform',
-      'Development of a micro front-end application in React.js / NextJS',
-      'Technical leadership of a development team, establishment of best practices, and coaching of team members to enhance their technical skills',
-      'Actively working with the company’s software architects',
-      'Development of a new loyalty program, including front-end integration of a new dedicated design system',
-      'Integration of two-factor authentication in a publicly available website',
-      'Organized company events, including finding and inviting guest speakers on software development and IT topics',
-    ],
     tech: ['Java', 'TypeScript', 'React', 'SpringBoot', 'K8S', 'Terraform', 'GCP'],
   },
   {
+    key: 'cgi-engineer',
     year: '2022–2024',
     role: 'Software Engineer',
     company: 'CGI',
-    achievements: [
-      'Development of Java micro-services using SpringBoot',
-      'Contributed to building a warehouse application and a mobile app’s back for front application for a world-renowned sport equipment manufacturer, using Java SpringBoot and Angular',
-      'Building a front-end application in React.js',
-      'Working in a feature team using agile principles',
-      'Application of the “You build, you run it” paradigm and using monitoring tools like Datadog on a daily basis',
-    ],
     tech: ['React', 'Angular', 'SpringBoot', 'PostgreSQL'],
   },
   {
+    key: 'cgi-data',
     year: '2019–2022',
     role: 'Data Consultant',
     company: 'CGI',
-    achievements: [
-      'Integration of InterSystems ESB platform',
-      'Design and development of ETL/ELT data flows feeding a centralized MDM system for various clients',
-    ],
-    tech: ['InterSystems ESB / IRIS', 'ObejctScript', 'SQL', 'Python', 'Angular', 'TypeScript']
+    tech: ['InterSystems ESB / IRIS', 'ObjectScript', 'SQL', 'Python', 'Angular', 'TypeScript'],
   },
   {
+    key: 'cgi-apprentice',
     year: '2018–2019',
     role: 'Apprenticeship',
     company: 'CGI',
-    achievements: [
-      'Integration of InterSystems ESB platform for several French government institutions',
-      'Development of REST APIs',
-      'Creation of a new intern application in Angular consuming REST APIs',
-    ],
     tech: ['InterSystems ESB / IRIS', 'Angular', 'TypeScript', 'SQL'],
   },
   {
+    key: 'sicad',
     year: '2016–2018',
     role: 'IT Student',
     company: 'SICAD',
-    achievements: [
-      'Software engineer in VB.net',
-      'Administration of the infrastructure of the company',
-      'Helpdesk',
-    ],
     tech: ['.net', 'SQL'],
   },
 ];
@@ -93,6 +69,8 @@ const tagVariants = {
 };
 
 export default function ResumeSection() {
+  const t = useTranslations();
+
   return (
     <section id="resume" className="relative py-24 px-4 sm:px-6 lg:px-8 min-h-screen">
       <div className="max-w-7xl mx-auto">
@@ -104,10 +82,10 @@ export default function ResumeSection() {
           className="mb-16"
         >
           <h2 className="font-terminal text-[#00FFFF] text-xl mb-2 glow-cyan">
-            &gt; cat ~/career.log
+            {t.resume.command}
           </h2>
           <h3 className="font-display text-5xl md:text-6xl font-black text-white">
-            SYSTEM <span className="text-gradient-cyan-magenta">ARCHITECTURE</span>
+            {t.resume.title} <span className="text-gradient-cyan-magenta">{t.resume.titleAccent}</span>
           </h3>
         </motion.div>
 
@@ -121,7 +99,7 @@ export default function ResumeSection() {
               <div className="space-y-12">
                 {timeline.map((node, index) => (
                   <motion.div
-                    key={node.year}
+                    key={node.key}
                     initial={{ opacity: 0, x: -50 }}
                     whileInView={{ opacity: 1, x: 0 }}
                     viewport={{ once: true }}
@@ -153,7 +131,7 @@ export default function ResumeSection() {
 
                       {/* Achievements */}
                       <ul className="space-y-2 mb-4">
-                        {node.achievements.map((achievement, i) => (
+                        {(t.resume.timelineAchievements[node.key] ?? []).map((achievement, i) => (
                           <li key={i} className="font-body text-sm text-[#E8E8E8] flex items-start">
                             <span className="text-[#00FFFF] mr-2">▸</span>
                             {achievement}
@@ -181,7 +159,7 @@ export default function ResumeSection() {
 
           {/* Skills Sidebar */}
           <div className="space-y-8">
-            {/* Skills Power Meters */}
+            {/* Skills */}
             <motion.div
               initial={{ opacity: 0, x: 50 }}
               whileInView={{ opacity: 1, x: 0 }}
@@ -190,7 +168,7 @@ export default function ResumeSection() {
             >
               <h4 className="font-display text-2xl font-bold text-white mb-6 flex items-center">
                 <Award className="w-6 h-6 mr-2 text-[#00FFFF]" />
-                Skills
+                {t.resume.skills}
               </h4>
 
               <div className="space-y-5">
@@ -202,7 +180,9 @@ export default function ResumeSection() {
                     viewport={{ once: true }}
                     transition={{ delay: index * 0.1 }}
                   >
-                    <div className="font-terminal text-xs text-[#888888] mb-2">{skill.category}</div>
+                    <div className="font-terminal text-xs text-[#888888] mb-2">
+                      {t.resume.skillCategories[skill.category] ?? skill.category}
+                    </div>
                     <motion.div
                       className="flex flex-wrap gap-2"
                       variants={tagContainerVariants}
@@ -241,12 +221,12 @@ export default function ResumeSection() {
               className="glass rounded-xl p-6 border border-[#FF00AA]/20 box-glow-magenta"
             >
               <h4 className="font-display text-xl font-bold text-white mb-4">
-                Currently Learning
+                {t.resume.currentlyLearning}
               </h4>
               <div className="space-y-3">
                 <div className="flex items-center justify-between">
                   <span className="font-terminal text-sm text-[#E8E8E8]">CKAD Certification</span>
-                  <span className="font-terminal text-xs text-[#00FF66]">In Progress</span>
+                  <span className="font-terminal text-xs text-[#00FF66]">{t.resume.inProgress}</span>
                 </div>
                 <div className="w-full h-2 bg-[#1a1a1a] rounded-full overflow-hidden">
                   <motion.div
@@ -271,7 +251,7 @@ export default function ResumeSection() {
               className="w-full font-terminal px-6 py-4 bg-transparent border-2 border-[#00FFFF] text-[#00FFFF] rounded-lg hover:bg-[#00FFFF] hover:text-[#0D0D0D] box-glow-cyan transition-all duration-300 flex items-center justify-center space-x-2"
             >
               <Download className="w-5 h-5" />
-              <span>[ PRINT BLUEPRINT ]</span>
+              <span>{t.resume.printBlueprint}</span>
             </motion.button>
           </div>
         </div>
