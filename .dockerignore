@@ -1,0 +1,20 @@
+# Dependencies (reinstalled inside the build)
+node_modules
+
+# Next.js build output (produced inside the build)
+.next
+out
+
+# Environment — never bake secrets into the image
+.env.local
+.env*.local
+
+# Git
+.git
+.gitignore
+
+# Misc
+README.md
+Dockerfile
+.dockerignore
+*.tsbuildinfo
