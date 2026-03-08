@@ -65,11 +65,6 @@ export default function KonamiCode() {
               <p className="font-terminal text-xs text-[#00FF66]">
                 // Achievement: Code Archaeologist 🏆
               </p>
-              <div className="mt-4 pt-4 border-t border-[#00FF66]/20">
-                <p className="font-terminal text-xs text-[#888888]">
-                  Fun fact: This portfolio was built with ☕ in Lille after hours of bass guitar sessions 🎸
-                </p>
-              </div>
             </div>
           </div>
         </motion.div>
