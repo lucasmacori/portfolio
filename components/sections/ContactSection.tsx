@@ -1,20 +1,29 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useTransition } from 'react';
 import { motion } from 'motion/react';
-import { Send, Check } from 'lucide-react';
+import { Send, Check, AlertTriangle } from 'lucide-react';
+import { sendMessage } from '@/app/actions';
 
 export default function ContactSection() {
   const [message, setMessage] = useState('');
   const [submitted, setSubmitted] = useState(false);
+  const [error, setError] = useState(false);
+  const [isPending, startTransition] = useTransition();
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    setSubmitted(true);
-    setTimeout(() => {
-      setSubmitted(false);
-      setMessage('');
-    }, 3000);
+    setError(false);
+    startTransition(async () => {
+      const result = await sendMessage(message);
+      if (result.success) {
+        setSubmitted(true);
+        setMessage('');
+        setTimeout(() => setSubmitted(false), 3000);
+      } else {
+        setError(true);
+      }
+    });
   };
 
   return (
@@ -64,13 +73,26 @@ export default function ContactSection() {
               {/* Submit Button */}
               <motion.button
                 type="submit"
-                whileHover={{ scale: 1.02 }}
-                whileTap={{ scale: 0.98 }}
-                className="w-full font-terminal text-lg px-8 py-4 bg-transparent border-2 border-[#00FFFF] text-[#00FFFF] rounded-lg hover:bg-[#00FFFF] hover:text-[#0D0D0D] box-glow-cyan transition-all duration-300 flex items-center justify-center space-x-2"
+                disabled={isPending}
+                whileHover={isPending ? {} : { scale: 1.02 }}
+                whileTap={isPending ? {} : { scale: 0.98 }}
+                className="w-full font-terminal text-lg px-8 py-4 bg-transparent border-2 border-[#00FFFF] text-[#00FFFF] rounded-lg hover:bg-[#00FFFF] hover:text-[#0D0D0D] box-glow-cyan transition-all duration-300 flex items-center justify-center space-x-2 disabled:opacity-50 disabled:cursor-not-allowed"
               >
-                <Send className="w-5 h-5" />
-                <span>[ TRANSMIT ]</span>
+                <Send className={`w-5 h-5 ${isPending ? 'animate-pulse' : ''}`} />
+                <span>{isPending ? '[ TRANSMITTING... ]' : '[ TRANSMIT ]'}</span>
               </motion.button>
+
+              {/* Error Message */}
+              {error && (
+                <motion.div
+                  initial={{ opacity: 0, y: -8 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  className="flex items-center space-x-2 font-terminal text-sm text-[#FF00AA]"
+                >
+                  <AlertTriangle className="w-4 h-4 shrink-0" />
+                  <span>Transmission failed. Try reaching out directly by email.</span>
+                </motion.div>
+              )}
 
               {/* Alternative Contact */}
               <div className="text-center pt-6 border-t border-[#00FFFF]/20">
