@@ -3,6 +3,7 @@
 import { useState, useEffect } from 'react';
 import { motion } from 'motion/react';
 import { ChevronDown } from 'lucide-react';
+import Image from 'next/image';
 
 export default function HeroSection() {
   const [bootComplete, setBootComplete] = useState(false);
@@ -85,6 +86,24 @@ export default function HeroSection() {
               animate={{ y: 0, opacity: 1 }}
               transition={{ delay: 0.3, duration: 0.8 }}
             >
+              {/* Profile Picture */}
+              <motion.div
+                initial={{ scale: 0.5, opacity: 0 }}
+                animate={{ scale: 1, opacity: 1 }}
+                transition={{ delay: 0.3, duration: 0.6, type: 'spring' }}
+                className="flex justify-center mb-8"
+              >
+                <div className="relative w-36 h-36 sm:w-44 sm:h-44 rounded-full overflow-hidden border-2 border-[#00FFFF] box-glow-cyan">
+                  <Image
+                    src="/profile-edited.jpg"
+                    alt="Lucas Macori"
+                    fill
+                    className="object-cover"
+                    priority
+                  />
+                </div>
+              </motion.div>
+
               <motion.h1
                 className="font-display text-6xl sm:text-7xl md:text-8xl lg:text-9xl font-black mb-4 text-white"
                 initial={{ scale: 0.8, opacity: 0 }}

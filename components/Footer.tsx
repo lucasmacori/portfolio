@@ -3,7 +3,7 @@
 import { motion } from 'motion/react';
 import { Coffee, Music } from 'lucide-react';
 
-export default function Footer() {
+export default function Footer({ version }: { version: string }) {
   return (
     <footer className="relative py-12 px-4 sm:px-6 lg:px-8 border-t border-[#00FFFF]/20">
       <div className="max-w-7xl mx-auto">
@@ -16,11 +16,8 @@ export default function Footer() {
             className="text-center md:text-left"
           >
             <p className="font-body text-sm text-[#E8E8E8] flex items-center justify-center md:justify-start space-x-2">
-              <span>Built with</span>
+              <span>Built with React and</span>
               <Coffee className="w-4 h-4 text-[#FF6B00]" />
-              <span>and</span>
-              <Music className="w-4 h-4 text-[#FF00AA]" />
-              <span>in Lille, France</span>
             </p>
           </motion.div>
 
@@ -33,7 +30,7 @@ export default function Footer() {
             className="text-center"
           >
             <p className="font-terminal text-xs text-[#888888]">
-              © 2024 Lucas MACORI // All rights reserved
+              It looks like you have reached the end of this website
             </p>
           </motion.div>
 
@@ -45,7 +42,7 @@ export default function Footer() {
             transition={{ delay: 0.2 }}
             className="text-center md:text-right"
           >
-            <p className="font-terminal text-xs text-[#00FFFF]">v1.0.0</p>
+            <p className="font-terminal text-xs text-[#00FFFF]">v{version}</p>
           </motion.div>
         </div>
 

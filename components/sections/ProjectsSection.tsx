@@ -1,7 +1,7 @@
 'use client';
 
 import { motion } from 'motion/react';
-import { ExternalLink, Lock } from 'lucide-react';
+import { ExternalLink } from 'lucide-react';
 
 interface Project {
   title: string;
@@ -10,75 +10,49 @@ interface Project {
   metrics: { label: string; value: string }[];
   status: 'live' | 'in-progress' | 'archived';
   link?: string;
-  locked?: boolean;
 }
 
 const projects: Project[] = [
   {
-    title: 'Loyalty Program Platform',
-    description: 'React/NextJS micro-frontend architecture with a brand new design system for seamless user experiences.',
-    tech: ['React', 'NextJS', 'TypeScript', 'Design System'],
+    title: 'Portfolio',
+    description: "The very site you're browsing — built with Next.js, Tailwind CSS and Framer Motion. Source open on GitHub.",
+    tech: ['Next.js', 'TypeScript', 'Tailwind CSS', 'Framer Motion'],
     metrics: [
-      { label: 'Users', value: '50K+' },
-      { label: 'Performance', value: '98%' },
+      { label: 'Type', value: 'This site' },
     ],
     status: 'live',
-    link: '#',
+    link: 'https://github.com/lucasmacori/portfolio',
   },
   {
-    title: 'Two-Factor Auth System',
-    description: 'Security-focused public website integration enabling robust 2FA for enterprise applications.',
-    tech: ['Java', 'SpringBoot', 'Security'],
+    title: 'Phrase Auto-Translate',
+    description: 'Fetches untranslated keys from PhraseApp, automatically translates them with DeepL, and pushes them back — fully automated i18n workflow.',
+    tech: ['JavaScript', 'DeepL API', 'PhraseApp'],
     metrics: [
-      { label: 'Security', value: 'A+' },
-      { label: 'Uptime', value: '99.9%' },
+      { label: 'Type', value: 'Tool' },
     ],
     status: 'live',
-    link: '#',
+    link: 'https://github.com/lucasmacori/phrase-app-auto-translate',
   },
   {
-    title: 'Warehouse & Mobile BFF',
-    description: 'SpringBoot backend + Angular frontend for sports equipment manufacturer warehouse management.',
-    tech: ['SpringBoot', 'Angular', 'PostgreSQL'],
+    title: 'ng-minesweeper',
+    description: 'Classic Minesweeper game built with Angular — fully playable in the browser with customizable grid size and mine count.',
+    tech: ['Angular', 'TypeScript'],
     metrics: [
-      { label: 'Efficiency', value: '+40%' },
-      { label: 'Lines', value: '25K+' },
+      { label: 'Type', value: 'Game' },
+      { label: 'Framework', value: 'Angular' },
+    ],
+    status: 'archived',
+    link: 'https://github.com/lucasmacori/ng-minesweeper',
+  },
+  {
+    title: 'Dotfiles',
+    description: 'All the configuration for the goodies I use on a daily basis — shell, editor, window manager and more.',
+    tech: ['Fish', 'QML', 'Shell'],
+    metrics: [
+      { label: 'Type', value: 'Rizz' },
     ],
     status: 'live',
-    link: '#',
-  },
-  {
-    title: 'Personal Kubernetes Cluster',
-    description: 'NestJS API + NuxtJS frontend with GitHub Actions CI/CD pipeline for automated deployments.',
-    tech: ['Kubernetes', 'NestJS', 'NuxtJS', 'GitHub Actions'],
-    metrics: [
-      { label: 'Containers', value: '12' },
-      { label: 'Deploy Time', value: '< 5min' },
-    ],
-    status: 'live',
-    link: '#',
-  },
-  {
-    title: 'Technical Blog',
-    description: 'Articles on sfeir.dev including introduction to vibe coding and modern development practices.',
-    tech: ['Writing', 'DevOps', 'Best Practices'],
-    metrics: [
-      { label: 'Articles', value: '15+' },
-      { label: 'Views', value: '10K+' },
-    ],
-    status: 'live',
-    link: 'https://sfeir.dev/author/lucas/',
-  },
-  {
-    title: 'CLASSIFIED',
-    description: 'Something special is brewing here... Try the Konami code to unlock.',
-    tech: ['???', '???', '???'],
-    metrics: [
-      { label: 'Status', value: 'LOCKED' },
-      { label: 'Access', value: 'DENIED' },
-    ],
-    status: 'in-progress',
-    locked: true,
+    link: 'https://github.com/lucasmacori/dotfiles',
   },
 ];
 
@@ -117,27 +91,27 @@ export default function ProjectsSection() {
         {/* Projects Grid */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {projects.map((project, index) => (
-            <motion.div
+            <motion.a
               key={project.title}
+              href={project.link}
+              target="_blank"
+              rel="noopener noreferrer"
+              aria-label={`View ${project.title} on GitHub (opens in a new tab)`}
               initial={{ opacity: 0, y: 50 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ delay: index * 0.1 }}
               whileHover={{ y: -8 }}
-              className="glass rounded-xl p-6 border border-[#00FFFF]/20 hover:border-[#00FFFF] hover:box-glow-cyan transition-all duration-300 group perspective"
+              className="glass rounded-xl p-6 border border-[#00FFFF]/20 hover:border-[#00FFFF] hover:box-glow-cyan transition-all duration-300 group perspective block"
             >
               {/* Status Badge */}
               <div className="flex items-center justify-between mb-4">
                 <span
                   className={`font-terminal text-xs px-3 py-1 rounded-full border ${getStatusColor(project.status)}`}
                 >
-                  {project.locked ? '🔒 CLASSIFIED' : project.status.toUpperCase()}
+                  {project.status.toUpperCase()}
                 </span>
-                {!project.locked ? (
-                  <ExternalLink className="w-5 h-5 text-[#00FFFF] opacity-0 group-hover:opacity-100 transition-opacity" />
-                ) : (
-                  <Lock className="w-5 h-5 text-[#FF00AA]" />
-                )}
+                <ExternalLink className="w-5 h-5 text-[#00FFFF] opacity-0 group-hover:opacity-100 transition-opacity" />
               </div>
 
               {/* Project Title */}
@@ -171,7 +145,7 @@ export default function ProjectsSection() {
                   </div>
                 ))}
               </div>
-            </motion.div>
+            </motion.a>
           ))}
         </div>
       </div>

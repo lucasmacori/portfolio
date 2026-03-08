@@ -1,3 +1,4 @@
+import { version } from '@/package.json';
 import Navigation from '@/components/Navigation';
 import HeroSection from '@/components/sections/HeroSection';
 import ProjectsSection from '@/components/sections/ProjectsSection';
@@ -42,7 +43,7 @@ export default async function Home() {
         <NetworkSection publicRepos={publicRepos} />
         <ContactSection />
       </main>
-      <Footer />
+      <Footer version={version} />
     </div>
   );
 }
