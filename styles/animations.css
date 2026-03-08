@@ -1,0 +1,47 @@
+/* ============================================================
+   Animations — keyframes and animation utility classes
+   ============================================================ */
+
+@layer utilities {
+  /* Terminal cursor blink */
+  .terminal-cursor::after {
+    content: '▌';
+    animation: blink 1s infinite;
+    color: var(--terminal-cyan);
+  }
+
+  @keyframes blink {
+    0%, 50% { opacity: 1; }
+    51%, 100% { opacity: 0; }
+  }
+
+  /* Float */
+  .float {
+    animation: float 6s ease-in-out infinite;
+  }
+
+  @keyframes float {
+    0%, 100% { transform: translateY(0px); }
+    50% { transform: translateY(-20px); }
+  }
+
+  /* Pulse — cyan */
+  .pulse-cyan {
+    animation: pulse-cyan 2s ease-in-out infinite;
+  }
+
+  @keyframes pulse-cyan {
+    0%, 100% { box-shadow: 0 0 10px rgba(0, 255, 255, 0.5); }
+    50% { box-shadow: 0 0 25px rgba(0, 255, 255, 0.8); }
+  }
+
+  /* Pulse — green */
+  .pulse-green {
+    animation: pulse-green 2s ease-in-out infinite;
+  }
+
+  @keyframes pulse-green {
+    0%, 100% { box-shadow: 0 0 10px rgba(0, 255, 102, 0.5); }
+    50% { box-shadow: 0 0 25px rgba(0, 255, 102, 0.8); }
+  }
+}
