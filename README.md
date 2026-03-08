@@ -2,6 +2,10 @@
 
 Personal portfolio built with Next.js 15, Tailwind CSS v4, and Framer Motion.
 
+Accessible at [lucasmacori.fr](https://lucasmacori.fr).
+
+![Screenshot of the portfolio website](https://github.com/lucasmacori/portfolio/blob/main/screenshot.png)
+
 ## Getting started
 
 ### 1. Install dependencies
