@@ -201,8 +201,7 @@ export default function NetworkSection({ publicRepos }: { publicRepos: number | 
           className="mt-16 text-center"
         >
           <p className="font-body text-[#E8E8E8]">
-            Based in <span className="text-[#00FFFF]">Lille 🍺, France 🥐</span> • Looking to relocate to{' '}
-            <span className="text-[#FF00AA]">Canada 🍁</span>
+            Based in <span className="text-[#00FFFF]">Lille 🍺, France 🥐</span>
           </p>
         </motion.div>
       </div>
