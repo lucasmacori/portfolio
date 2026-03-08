@@ -1,0 +1,144 @@
+'use client';
+
+import { useState } from 'react';
+import { motion } from 'motion/react';
+import { Send, Check } from 'lucide-react';
+
+export default function ContactSection() {
+  const [message, setMessage] = useState('');
+  const [submitted, setSubmitted] = useState(false);
+
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    setSubmitted(true);
+    setTimeout(() => {
+      setSubmitted(false);
+      setMessage('');
+    }, 3000);
+  };
+
+  return (
+    <section id="contact" className="relative py-24 px-4 sm:px-6 lg:px-8 min-h-screen flex items-center">
+      <div className="max-w-4xl mx-auto w-full">
+        {/* Section Title */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          className="mb-16 text-center"
+        >
+          <h2 className="font-terminal text-[#00FFFF] text-xl mb-2 glow-cyan">
+            &gt; ssh lucas@contact
+          </h2>
+          <h3 className="font-display text-5xl md:text-6xl font-black text-white">
+            ESTABLISH <span className="text-gradient-cyan-magenta">CONNECTION</span>
+          </h3>
+        </motion.div>
+
+        {/* Contact Form */}
+        <motion.div
+          initial={{ opacity: 0, y: 50 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          className="glass-strong rounded-xl p-8 border border-[#00FFFF]/20 scanlines"
+        >
+          {!submitted ? (
+            <form onSubmit={handleSubmit} className="space-y-6">
+              {/* Terminal Prompt */}
+              <div className="font-terminal text-[#00FFFF] mb-4">
+                visitor@portfolio:~$
+              </div>
+
+              {/* Message Input */}
+              <div className="relative">
+                <textarea
+                  value={message}
+                  onChange={(e) => setMessage(e.target.value)}
+                  placeholder="Type your message..."
+                  rows={6}
+                  className="w-full bg-[#1a1a1a] border border-[#00FFFF]/30 rounded-lg px-4 py-3 text-[#E8E8E8] font-terminal text-sm focus:outline-none focus:border-[#00FFFF] transition-all resize-none"
+                  required
+                />
+              </div>
+
+              {/* Submit Button */}
+              <motion.button
+                type="submit"
+                whileHover={{ scale: 1.02 }}
+                whileTap={{ scale: 0.98 }}
+                className="w-full font-terminal text-lg px-8 py-4 bg-transparent border-2 border-[#00FFFF] text-[#00FFFF] rounded-lg hover:bg-[#00FFFF] hover:text-[#0D0D0D] box-glow-cyan transition-all duration-300 flex items-center justify-center space-x-2"
+              >
+                <Send className="w-5 h-5" />
+                <span>[ TRANSMIT ]</span>
+              </motion.button>
+
+              {/* Alternative Contact */}
+              <div className="text-center pt-6 border-t border-[#00FFFF]/20">
+                <p className="font-terminal text-sm text-[#888888] mb-2">
+                  Or reach out directly:
+                </p>
+                <a
+                  href="mailto:lucas.macori@gmail.com"
+                  className="font-terminal text-[#00FFFF] hover:text-[#FF00AA] transition-colors glow-cyan"
+                >
+                  lucas.macori@gmail.com
+                </a>
+              </div>
+            </form>
+          ) : (
+            <motion.div
+              initial={{ opacity: 0, scale: 0.9 }}
+              animate={{ opacity: 1, scale: 1 }}
+              className="text-center py-12"
+            >
+              <motion.div
+                initial={{ scale: 0 }}
+                animate={{ scale: 1, rotate: 360 }}
+                transition={{ type: 'spring', duration: 0.6 }}
+                className="w-20 h-20 mx-auto mb-6 rounded-full bg-[#00FF66]/20 border-2 border-[#00FF66] flex items-center justify-center box-glow-green"
+              >
+                <Check className="w-10 h-10 text-[#00FF66]" />
+              </motion.div>
+              <h4 className="font-display text-2xl font-bold text-white mb-2">
+                CONNECTION ESTABLISHED ✓
+              </h4>
+              <p className="font-terminal text-[#00FF66]">
+                Message transmitted successfully. I&apos;ll respond within 24 hours.
+              </p>
+            </motion.div>
+          )}
+        </motion.div>
+
+        {/* Availability Heatmap */}
+        <motion.div
+          initial={{ opacity: 0 }}
+          whileInView={{ opacity: 1 }}
+          viewport={{ once: true }}
+          transition={{ delay: 0.3 }}
+          className="mt-12 glass rounded-xl p-6 border border-[#00FFFF]/20"
+        >
+          <h4 className="font-terminal text-sm text-[#888888] mb-4">
+            Best times to reach me (CET/Paris time):
+          </h4>
+          <div className="grid grid-cols-7 gap-2">
+            {['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'].map((day, i) => (
+              <div key={day} className="text-center">
+                <div className="font-terminal text-xs text-[#888888] mb-2">{day}</div>
+                <div
+                  className={`h-12 rounded ${
+                    i < 5
+                      ? 'bg-[#00FF66]/30 border border-[#00FF66]'
+                      : 'bg-[#888888]/20 border border-[#888888]/30'
+                  }`}
+                />
+              </div>
+            ))}
+          </div>
+          <p className="font-terminal text-xs text-[#888888] mt-4 text-center">
+            Most responsive during weekdays, 9AM - 6PM
+          </p>
+        </motion.div>
+      </div>
+    </section>
+  );
+}
