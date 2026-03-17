@@ -45,6 +45,7 @@ const en = {
     } as Record<string, string>,
     currentlyLearning: 'Currently Learning',
     inProgress: 'In Progress',
+    certified: 'Certified',
     printBlueprint: '[ PRINT BLUEPRINT ]',
     timelineAchievements: {
       sfeir: [
@@ -165,6 +166,7 @@ const fr: typeof en = {
     },
     currentlyLearning: "En cours d'apprentissage",
     inProgress: 'En cours',
+    certified: 'Certifié',
     printBlueprint: '[ IMPRIMER LE CV ]',
     timelineAchievements: {
       sfeir: [

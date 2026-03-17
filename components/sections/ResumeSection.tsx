@@ -226,12 +226,42 @@ export default function ResumeSection() {
               <div className="space-y-3">
                 <div className="flex items-center justify-between">
                   <span className="font-terminal text-sm text-[#E8E8E8]">CKAD Certification</span>
+                  <span className="font-terminal text-xs text-[#00FFFF]">{t.resume.certified}</span>
+                </div>
+                <div className="w-full h-2 bg-[#1a1a1a] rounded-full overflow-hidden">
+                  <motion.div
+                    initial={{ width: 0 }}
+                    whileInView={{ width: '100%' }}
+                    viewport={{ once: true }}
+                    transition={{ duration: 1 }}
+                    className="h-full bg-[#00FFFF]"
+                  />
+                </div>
+              </div>
+              <div className="space-y-3 mt-3">
+                <div className="flex items-center justify-between">
+                  <span className="font-terminal text-sm text-[#E8E8E8]">SpringBoot WebFlux</span>
                   <span className="font-terminal text-xs text-[#00FF66]">{t.resume.inProgress}</span>
                 </div>
                 <div className="w-full h-2 bg-[#1a1a1a] rounded-full overflow-hidden">
                   <motion.div
                     initial={{ width: 0 }}
-                    whileInView={{ width: '70%' }}
+                    whileInView={{ width: '50%' }}
+                    viewport={{ once: true }}
+                    transition={{ duration: 1 }}
+                    className="h-full bg-[#00FF66] pulse-green"
+                  />
+                </div>
+              </div>
+              <div className="space-y-3 mt-3">
+                <div className="flex items-center justify-between">
+                  <span className="font-terminal text-sm text-[#E8E8E8]">Terraform</span>
+                  <span className="font-terminal text-xs text-[#00FF66]">{t.resume.inProgress}</span>
+                </div>
+                <div className="w-full h-2 bg-[#1a1a1a] rounded-full overflow-hidden">
+                  <motion.div
+                    initial={{ width: 0 }}
+                    whileInView={{ width: '10%' }}
                     viewport={{ once: true }}
                     transition={{ duration: 1 }}
                     className="h-full bg-[#00FF66] pulse-green"
