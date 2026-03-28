@@ -68,7 +68,7 @@ export default function NetworkSection({ publicRepos }: { publicRepos: number | 
         {/* Constellation Network Visualization */}
         <div className="relative max-w-4xl mx-auto">
           {/* Connection Lines */}
-          <svg className="absolute inset-0 w-full h-full pointer-events-none" style={{ zIndex: 0 }}>
+          <svg aria-hidden="true" className="absolute inset-0 w-full h-full pointer-events-none" style={{ zIndex: 0 }}>
             {nodes.map((_, i) => {
               if (i < nodes.length - 1) {
                 const angle1 = (i * 360) / nodes.length;
@@ -107,6 +107,7 @@ export default function NetworkSection({ publicRepos }: { publicRepos: number | 
                   href={node.url}
                   target="_blank"
                   rel="noopener noreferrer"
+                  aria-label={`${node.name} (opens in a new tab)`}
                   initial={{ opacity: 0, scale: 0 }}
                   whileInView={{ opacity: 1, scale: 1 }}
                   viewport={{ once: true }}
@@ -130,7 +131,7 @@ export default function NetworkSection({ publicRepos }: { publicRepos: number | 
                           className="w-12 h-12 rounded-lg flex items-center justify-center border transition-all duration-300"
                           style={{ borderColor: node.color, backgroundColor: `${node.color}20` }}
                         >
-                          <Icon className="w-6 h-6" style={{ color: node.color }} />
+                          <Icon aria-hidden="true" className="w-6 h-6" style={{ color: node.color }} />
                         </div>
                         <div>
                           <h4 className="font-display text-xl font-bold text-white">{node.name}</h4>
@@ -142,6 +143,7 @@ export default function NetworkSection({ publicRepos }: { publicRepos: number | 
 
                       {/* Pulse Indicator */}
                       <motion.div
+                        aria-hidden="true"
                         animate={{ scale: [1, 1.2, 1], opacity: [1, 0.5, 1] }}
                         transition={{ duration: 2, repeat: Infinity }}
                         className="w-3 h-3 rounded-full"
@@ -179,6 +181,7 @@ export default function NetworkSection({ publicRepos }: { publicRepos: number | 
 
           {/* Central Node */}
           <motion.div
+            aria-hidden="true"
             initial={{ opacity: 0, scale: 0 }}
             whileInView={{ opacity: 1, scale: 1 }}
             viewport={{ once: true }}

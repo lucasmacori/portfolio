@@ -98,18 +98,18 @@ export default function ArticlesSection() {
                 {/* Featured Badge */}
                 {article.featured && (
                   <div className="absolute top-4 right-4">
-                    <TrendingUp className="w-5 h-5 text-[#FF00AA]" />
+                    <TrendingUp aria-hidden="true" className="w-5 h-5 text-[#FF00AA]" />
                   </div>
                 )}
 
                 {/* Waveform Visualization (Decorative) */}
-                <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-transparent via-[#00FFFF] to-transparent opacity-50"></div>
+                <div aria-hidden="true" className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-transparent via-[#00FFFF] to-transparent opacity-50"></div>
 
                 <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
                   <div className="flex-1">
                     {/* Category Badge */}
                     <div className="flex items-center space-x-3 mb-3">
-                      <Radio className={`w-4 h-4 ${getCategoryColor(article.category)}`} />
+                      <Radio aria-hidden="true" className={`w-4 h-4 ${getCategoryColor(article.category)}`} />
                       <span
                         className={`font-terminal text-xs px-3 py-1 rounded-full border ${getCategoryColor(article.category)}`}
                       >

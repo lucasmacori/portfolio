@@ -1,8 +1,9 @@
 'use client';
 
-import { motion } from 'motion/react';
-import { Briefcase, Download, Award } from 'lucide-react';
-import { useTranslations } from '@/contexts/LanguageContext';
+import { motion, AnimatePresence } from 'motion/react';
+import { Briefcase, Download, Award, ChevronDown } from 'lucide-react';
+import { useState } from 'react';
+import { useTranslations, useLanguage } from '@/contexts/LanguageContext';
 
 interface TimelineNode {
   key: string;
@@ -70,6 +71,20 @@ const tagVariants = {
 
 export default function ResumeSection() {
   const t = useTranslations();
+  const { lang: currentLang } = useLanguage();
+  const [dropdownOpen, setDropdownOpen] = useState(false);
+
+  const handleDownload = (lang: 'en' | 'fr') => {
+    const link = document.createElement('a');
+    link.href = `/lucasmacori_resume_${lang}.pdf`;
+    link.download = `lucasmacori_resume_${lang}.pdf`;
+    link.click();
+    setDropdownOpen(false);
+  };
+
+  const handleDropdownKeyDown = (e: React.KeyboardEvent) => {
+    if (e.key === 'Escape') setDropdownOpen(false);
+  };
 
   return (
     <section id="resume" className="relative py-24 px-4 sm:px-6 lg:px-8 min-h-screen">
@@ -123,7 +138,7 @@ export default function ResumeSection() {
                             {node.role}
                           </h4>
                           <div className="flex items-center space-x-2 text-[#E8E8E8]">
-                            <Briefcase className="w-4 h-4" />
+                            <Briefcase aria-hidden="true" className="w-4 h-4" />
                             <span className="font-body">{node.company}</span>
                           </div>
                         </div>
@@ -167,7 +182,7 @@ export default function ResumeSection() {
               className="glass rounded-xl p-6 border border-[#00FFFF]/20"
             >
               <h4 className="font-display text-2xl font-bold text-white mb-6 flex items-center">
-                <Award className="w-6 h-6 mr-2 text-[#00FFFF]" />
+                <Award aria-hidden="true" className="w-6 h-6 mr-2 text-[#00FFFF]" />
                 {t.resume.skills}
               </h4>
 
@@ -271,18 +286,54 @@ export default function ResumeSection() {
             </motion.div>
 
             {/* Download Resume */}
-            <motion.button
+            <motion.div
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ delay: 0.4 }}
-              whileHover={{ scale: 1.05 }}
-              whileTap={{ scale: 0.95 }}
-              className="w-full font-terminal px-6 py-4 bg-transparent border-2 border-[#00FFFF] text-[#00FFFF] rounded-lg hover:bg-[#00FFFF] hover:text-[#0D0D0D] box-glow-cyan transition-all duration-300 flex items-center justify-center space-x-2"
+              className="relative w-full"
             >
-              <Download className="w-5 h-5" />
-              <span>{t.resume.printBlueprint}</span>
-            </motion.button>
+              <button
+                onClick={() => setDropdownOpen((o) => !o)}
+                aria-haspopup="menu"
+                aria-expanded={dropdownOpen}
+                className="w-full font-terminal px-6 py-4 bg-transparent border-2 border-[#00FFFF] text-[#00FFFF] rounded-lg hover:bg-[#00FFFF] hover:text-[#0D0D0D] box-glow-cyan transition-all duration-300 flex items-center justify-center space-x-2"
+              >
+                <Download aria-hidden="true" className="w-5 h-5" />
+                <span>{t.resume.printBlueprint}</span>
+                <ChevronDown aria-hidden="true" className={`w-4 h-4 ml-1 transition-transform duration-200 ${dropdownOpen ? 'rotate-180' : ''}`} />
+              </button>
+              <AnimatePresence>
+                {dropdownOpen && (
+                  <motion.div
+                    role="menu"
+                    onKeyDown={handleDropdownKeyDown}
+                    initial={{ opacity: 0, y: -6 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    exit={{ opacity: 0, y: -6 }}
+                    transition={{ duration: 0.15 }}
+                    className="absolute bottom-full mb-2 left-0 w-full glass border border-[#00FFFF]/40 rounded-lg overflow-hidden z-10"
+                  >
+                    {(['en', 'fr'] as const).map((lang) => (
+                      <button
+                        key={lang}
+                        role="menuitem"
+                        onClick={() => handleDownload(lang)}
+                        className={`w-full flex items-center space-x-3 px-5 py-3 font-terminal text-sm transition-colors duration-150
+                          ${lang === currentLang
+                            ? 'text-[#00FFFF] bg-[#00FFFF]/10'
+                            : 'text-[#888888] hover:text-[#00FFFF] hover:bg-[#00FFFF]/5'
+                          }`}
+                      >
+                        <span className="uppercase tracking-widest text-xs opacity-60">{lang}</span>
+                        <span>{lang === 'en' ? t.resume.downloadEn : t.resume.downloadFr}</span>
+                        {lang === currentLang && <span className="ml-auto text-[10px] opacity-50">✓</span>}
+                      </button>
+                    ))}
+                  </motion.div>
+                )}
+              </AnimatePresence>
+            </motion.div>
           </div>
         </div>
       </div>

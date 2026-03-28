@@ -47,6 +47,8 @@ const en = {
     inProgress: 'In Progress',
     certified: 'Certified',
     printBlueprint: '[ PRINT BLUEPRINT ]',
+    downloadEn: 'English',
+    downloadFr: 'French',
     timelineAchievements: {
       sfeir: [
         'Development and maintenance of Java micro-services using SpringBoot and Terraform',
@@ -168,6 +170,8 @@ const fr: typeof en = {
     inProgress: 'En cours',
     certified: 'Certifié',
     printBlueprint: '[ IMPRIMER LE CV ]',
+    downloadEn: 'Anglais',
+    downloadFr: 'Français',
     timelineAchievements: {
       sfeir: [
         'Développement et maintenance de micro-services Java avec SpringBoot et Terraform',

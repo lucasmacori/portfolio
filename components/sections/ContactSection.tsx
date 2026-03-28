@@ -87,7 +87,11 @@ export default function ContactSection() {
 
                 {/* Message Input */}
                 <div className="relative">
+                  <label htmlFor="contact-message" className="sr-only">
+                    {t.contact.placeholder}
+                  </label>
                   <textarea
+                    id="contact-message"
                     value={message}
                     onChange={(e) => setMessage(e.target.value)}
                     placeholder={t.contact.placeholder}
@@ -105,7 +109,7 @@ export default function ContactSection() {
                   whileTap={isPending ? {} : { scale: 0.98 }}
                   className="w-full font-terminal text-lg px-8 py-4 bg-transparent border-2 border-[#00FFFF] text-[#00FFFF] rounded-lg hover:bg-[#00FFFF] hover:text-[#0D0D0D] box-glow-cyan transition-all duration-300 flex items-center justify-center space-x-2 disabled:opacity-50 disabled:cursor-not-allowed"
                 >
-                  <Send className={`w-5 h-5 ${isPending ? 'animate-pulse' : ''}`} />
+                  <Send aria-hidden="true" className={`w-5 h-5 ${isPending ? 'animate-pulse' : ''}`} />
                   <span>{isPending ? t.contact.transmitting : t.contact.transmit}</span>
                 </motion.button>
 
@@ -135,11 +139,12 @@ export default function ContactSection() {
                 {/* Error Message */}
                 {error && (
                   <motion.div
+                    role="alert"
                     initial={{ opacity: 0, y: -8 }}
                     animate={{ opacity: 1, y: 0 }}
                     className="flex items-center space-x-2 font-terminal text-sm text-[#FF00AA]"
                   >
-                    <AlertTriangle className="w-4 h-4 shrink-0" />
+                    <AlertTriangle aria-hidden="true" className="w-4 h-4 shrink-0" />
                     <span>{t.contact.error}</span>
                   </motion.div>
                 )}
@@ -170,7 +175,7 @@ export default function ContactSection() {
                 transition={{ type: 'spring', duration: 0.6 }}
                 className="w-20 h-20 mx-auto mb-6 rounded-full bg-[#00FF66]/20 border-2 border-[#00FF66] flex items-center justify-center box-glow-green"
               >
-                <Check className="w-10 h-10 text-[#00FF66]" />
+                <Check aria-hidden="true" className="w-10 h-10 text-[#00FF66]" />
               </motion.div>
               <h4 className="font-display text-2xl font-bold text-white mb-2">
                 {t.contact.successTitle}

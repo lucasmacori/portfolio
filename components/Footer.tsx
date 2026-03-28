@@ -19,7 +19,7 @@ export default function Footer({ version }: { version: string }) {
           >
             <p className="font-body text-sm text-[#E8E8E8] flex items-center justify-center md:justify-start space-x-2">
               <span>{t.footer.builtWith}</span>
-              <Coffee className="w-4 h-4 text-[#FF6B00]" />
+              <Coffee aria-hidden="true" className="w-4 h-4 text-[#FF6B00]" />
             </p>
           </motion.div>
 
@@ -49,7 +49,7 @@ export default function Footer({ version }: { version: string }) {
         </div>
 
         {/* Decorative Line */}
-        <div className="mt-8 relative h-px bg-gradient-to-r from-transparent via-[#00FFFF] to-transparent opacity-30"></div>
+        <div aria-hidden="true" className="mt-8 relative h-px bg-gradient-to-r from-transparent via-[#00FFFF] to-transparent opacity-30"></div>
       </div>
     </footer>
   );

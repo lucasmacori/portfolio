@@ -43,6 +43,8 @@ export default function KonamiCode() {
     <AnimatePresence>
       {activated && (
         <motion.div
+          role="status"
+          aria-live="polite"
           initial={{ opacity: 0, scale: 0.5, y: 100 }}
           animate={{ opacity: 1, scale: 1, y: 0 }}
           exit={{ opacity: 0, scale: 0.5, y: -100 }}
@@ -50,6 +52,7 @@ export default function KonamiCode() {
         >
           <div className="flex items-start space-x-3">
             <motion.div
+              aria-hidden="true"
               animate={{ rotate: 360 }}
               transition={{ duration: 2, repeat: Infinity, ease: 'linear' }}
             >

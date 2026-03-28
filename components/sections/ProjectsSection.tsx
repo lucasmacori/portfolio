@@ -108,7 +108,7 @@ export default function ProjectsSection() {
                 >
                   {t.projects.status[project.status] ?? project.status.toUpperCase()}
                 </span>
-                <ExternalLink className="w-5 h-5 text-[#00FFFF] opacity-0 group-hover:opacity-100 transition-opacity" />
+                <ExternalLink aria-hidden="true" className="w-5 h-5 text-[#00FFFF] opacity-0 group-hover:opacity-100 transition-opacity" />
               </div>
 
               {/* Project Title */}

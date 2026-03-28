@@ -40,6 +40,15 @@ export default function Navigation() {
     }
   };
 
+  useEffect(() => {
+    if (!isMobileMenuOpen) return;
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') setIsMobileMenuOpen(false);
+    };
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, [isMobileMenuOpen]);
+
   const navItems = [
     { id: 'projects', label: '/projects' },
     { id: 'articles', label: '/articles' },
@@ -81,6 +90,7 @@ export default function Navigation() {
             {/* Logo */}
             <button
               onClick={() => scrollToSection('hero')}
+              aria-label="Go to top"
               className="font-terminal text-xl glow-cyan hover:glow-magenta transition-all duration-300"
             >
               ~/lucas
@@ -92,6 +102,7 @@ export default function Navigation() {
                 <button
                   key={item.id}
                   onClick={() => scrollToSection(item.id)}
+                  aria-current={activeSection === item.id ? 'true' : undefined}
                   className={`font-terminal relative transition-colors duration-300 ${
                     activeSection === item.id
                       ? 'text-[#00FFFF] glow-cyan'
@@ -115,9 +126,15 @@ export default function Navigation() {
               <LangToggle />
               <button
                 onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+                aria-label={isMobileMenuOpen ? 'Close navigation menu' : 'Open navigation menu'}
+                aria-expanded={isMobileMenuOpen}
+                aria-controls="mobile-menu"
                 className="text-[#00FFFF] hover:text-[#FF00AA] transition-colors"
               >
-                {isMobileMenuOpen ? <X size={24} /> : <Menu size={24} />}
+                {isMobileMenuOpen
+                  ? <X aria-hidden="true" size={24} />
+                  : <Menu aria-hidden="true" size={24} />
+                }
               </button>
             </div>
           </div>
@@ -127,6 +144,10 @@ export default function Navigation() {
       {/* Mobile Menu Overlay */}
       {isMobileMenuOpen && (
         <motion.div
+          id="mobile-menu"
+          role="dialog"
+          aria-modal="true"
+          aria-label="Navigation menu"
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}

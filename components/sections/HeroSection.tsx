@@ -30,20 +30,25 @@ export default function HeroSection() {
   const techBadges = ['Java', 'TypeScript', 'React', 'SpringBoot', 'Kubernetes', 'NextJS'];
 
   const symbols = ['{}', '[]', '()', '<>', '/>', '::'];
-  const [particles] = useState(() =>
-    Array.from({ length: 20 }, () => ({
-      x: Math.random() * 1000,
-      y: Math.random() * 1000,
-      endY: Math.random() * 1000,
-      duration: 10 + Math.random() * 10,
-      symbol: symbols[Math.floor(Math.random() * symbols.length)],
-    }))
-  );
+  const [particles, setParticles] = useState<{ x: number; y: number; endY: number; duration: number; symbol: string }[]>([]);
+
+  useEffect(() => {
+    setParticles(
+      Array.from({ length: 20 }, () => ({
+        x: Math.random() * 1000,
+        y: Math.random() * 1000,
+        endY: Math.random() * 1000,
+        duration: 10 + Math.random() * 10,
+        symbol: symbols[Math.floor(Math.random() * symbols.length)],
+      }))
+    );
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   return (
     <section id="hero" className="relative min-h-screen flex items-center justify-center overflow-hidden circuit-bg">
       {/* Floating Code Particles Background */}
-      <div className="absolute inset-0 overflow-hidden pointer-events-none">
+      <div aria-hidden="true" className="absolute inset-0 overflow-hidden pointer-events-none">
         {particles.map((p, i) => (
           <motion.div
             key={i}
@@ -65,7 +70,7 @@ export default function HeroSection() {
             className="glass-strong rounded-lg p-8 max-w-2xl mx-auto scanlines"
           >
             <div className="font-terminal text-left">
-              <div className="flex items-center space-x-2 mb-4">
+              <div aria-hidden="true" className="flex items-center space-x-2 mb-4">
                 <div className="w-3 h-3 rounded-full bg-[#FF00AA]"></div>
                 <div className="w-3 h-3 rounded-full bg-[#00FF66]"></div>
                 <div className="w-3 h-3 rounded-full bg-[#00FFFF]"></div>
@@ -138,7 +143,7 @@ export default function HeroSection() {
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ delay: 1.2 + index * 0.1 }}
                     whileHover={{ scale: 1.1, rotate: 5 }}
-                    className="glass px-4 py-2 rounded-full font-terminal text-sm border border-[#00FFFF]/30 hover:border-[#FF00AA] hover:box-glow-magenta transition-all duration-300 cursor-pointer"
+                    className="glass px-4 py-2 rounded-full font-terminal text-sm border border-[#00FFFF]/30 hover:border-[#FF00AA] hover:box-glow-magenta transition-all duration-300"
                   >
                     {tech}
                   </motion.div>
@@ -168,6 +173,7 @@ export default function HeroSection() {
       {/* Scroll Indicator */}
       {bootComplete && (
         <motion.div
+          aria-hidden="true"
           initial={{ opacity: 0 }}
           animate={{ opacity: 1, y: [0, 10, 0] }}
           transition={{ delay: 2, y: { duration: 2, repeat: Infinity } }}
