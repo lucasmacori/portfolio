@@ -8,7 +8,7 @@ import NetworkSection from '@/components/sections/NetworkSection';
 import ContactSection from '@/components/sections/ContactSection';
 import Footer from '@/components/Footer';
 import CustomCursor from '@/components/CustomCursor';
-import KonamiCode from '@/components/KonamiCode';
+import KonamiCode from '@/components/KonamiCodeLoader';
 import ScrollProgress from '@/components/ScrollProgress';
 import ParticleBackground from '@/components/ParticleBackground';
 import BackToTop from '@/components/BackToTop';

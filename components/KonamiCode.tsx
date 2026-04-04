@@ -208,9 +208,9 @@ type Phase = 'idle' | 'shutdown' | 'terminal';
 // Component
 // ---------------------------------------------------------------------------
 
-export default function KonamiCode() {
+export default function KonamiCode({ initialPhase = 'idle' }: { initialPhase?: Phase }) {
   const [, setKeys] = useState<string[]>([]);
-  const [phase, setPhase]         = useState<Phase>('idle');
+  const [phase, setPhase]         = useState<Phase>(initialPhase);
   const [visibleLines, setVisibleLines] = useState<string[]>([]);
   const [isBooting, setIsBooting] = useState(false);
   const [cwd, setCwd]             = useState<string[]>([]);
@@ -230,6 +230,14 @@ export default function KonamiCode() {
           next.every((k, i) => k === KONAMI_CODE[i])
         ) {
           setPhase('shutdown');
+          import('firebase/analytics').then(({ getAnalytics, logEvent }) => {
+            import('firebase/app').then(({ getApps }) => {
+              const apps = getApps();
+              if (apps.length > 0) {
+                logEvent(getAnalytics(apps[0]), 'konami_code_triggered');
+              }
+            });
+          });
           return [];
         }
         return next;
