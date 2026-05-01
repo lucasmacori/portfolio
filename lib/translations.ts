@@ -16,6 +16,7 @@ const en = {
     } as Record<string, string>,
     descriptions: {
       portfolio: "The very site you're browsing — built with Next.js, Tailwind CSS and Framer Motion. Source open on GitHub.",
+      dags: 'Private AI workspace with chat, document uploads, translation, and local-model support — packaged as a self-hostable full-stack app.',
       phraseAutoTranslate: 'Fetches untranslated keys from PhraseApp, automatically translates them with DeepL, and pushes them back — fully automated i18n workflow.',
       ngMinesweeper: 'Classic Minesweeper game built with Angular — fully playable in the browser with customizable grid size and mine count.',
       dotfiles: 'All the configuration for the goodies I use on a daily basis — shell, editor, window manager and more.',
@@ -139,6 +140,7 @@ const fr: typeof en = {
     },
     descriptions: {
       portfolio: "Le site que vous consultez en ce moment — construit avec Next.js, Tailwind CSS et Framer Motion. Code source disponible sur GitHub.",
+      dags: "Workspace IA privé avec chat, dépôt de documents, traduction et support des modèles locaux — packagé comme une application full-stack auto-hébergeable.",
       phraseAutoTranslate: "Récupère les clés non traduites depuis PhraseApp, les traduit automatiquement avec DeepL, puis les renvoie — workflow i18n entièrement automatisé.",
       ngMinesweeper: "Jeu de Démineur classique développé avec Angular — entièrement jouable dans le navigateur avec une grille et un nombre de mines personnalisables.",
       dotfiles: "Toute la configuration des outils que j'utilise au quotidien — shell, éditeur, gestionnaire de fenêtres et plus encore.",

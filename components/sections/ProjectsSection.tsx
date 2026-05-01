@@ -23,6 +23,14 @@ const projects: Project[] = [
     link: 'https://github.com/lucasmacori/portfolio',
   },
   {
+    title: 'DAGS',
+    translationKey: 'dags',
+    tech: ['Spring Boot', 'Spring AI', 'Spring Security', 'TanStack Start', 'PostgreSQL'],
+    metrics: [{ label: 'Type', value: 'AI Workspace' }],
+    status: 'live',
+    link: 'https://github.com/lucasmacori/DAGS',
+  },
+  {
     title: 'Phrase Auto-Translate',
     translationKey: 'phraseAutoTranslate',
     tech: ['JavaScript', 'DeepL API', 'PhraseApp'],
