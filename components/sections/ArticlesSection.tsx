@@ -15,6 +15,14 @@ interface Article {
 
 const articles: Article[] = [
   {
+    title: 'Et si votre prochain développeur était un agent IA ? Repenser le développement avec l’Agentic Experience',
+    category: 'AI',
+    readTime: '7 min',
+    date: '2026.04.14',
+    url: 'https://www.sfeir.dev/ia/ch-et-si-votre-prochain-developpeur-etait-un-agent-ia-repenser-le-developpement-avec-lagentic-experience/',
+    featured: true,
+  },
+  {
     title: "Qu'est ce que le Vibe coding ?",
     category: 'AI',
     readTime: '5 min',
