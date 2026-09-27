@@ -1,9 +1,8 @@
 'use client';
 
-import { motion, AnimatePresence } from 'motion/react';
+import { motion } from 'motion/react';
 import { Briefcase, Download, Award, ChevronDown } from 'lucide-react';
-import { useState } from 'react';
-import { useTranslations, useLanguage } from '@/contexts/LanguageContext';
+import { useTranslations } from '@/contexts/LanguageContext';
 
 interface TimelineNode {
   key: string;
@@ -71,37 +70,21 @@ const tagVariants = {
 
 export default function ResumeSection() {
   const t = useTranslations();
-  const { lang: currentLang } = useLanguage();
-  const [dropdownOpen, setDropdownOpen] = useState(false);
-
-  const handleDownload = (lang: 'en' | 'fr') => {
-    const link = document.createElement('a');
-    link.href = `/lucasmacori_resume_${lang}.pdf`;
-    link.download = `lucasmacori_resume_${lang}.pdf`;
-    link.click();
-    setDropdownOpen(false);
-  };
-
-  const handleDropdownKeyDown = (e: React.KeyboardEvent) => {
-    if (e.key === 'Escape') setDropdownOpen(false);
-  };
-
   return (
-    <section id="resume" className="relative py-24 px-4 sm:px-6 lg:px-8 min-h-screen">
+    <section id="resume" aria-labelledby="resume-title" className="relative py-24 px-4 sm:px-6 lg:px-8 min-h-screen">
       <div className="max-w-7xl mx-auto">
         {/* Section Title */}
         <motion.div
-          initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           className="mb-16"
         >
-          <h2 className="font-terminal text-[#00FFFF] text-xl mb-2 glow-cyan">
+          <p className="font-terminal text-[#00FFFF] text-xl mb-2 glow-cyan" aria-hidden="true">
             {t.resume.command}
-          </h2>
-          <h3 className="font-display text-5xl md:text-6xl font-black text-white">
+          </p>
+          <h2 id="resume-title" className="font-display text-4xl md:text-6xl font-black text-white">
             {t.resume.title} <span className="text-gradient-cyan-magenta">{t.resume.titleAccent}</span>
-          </h3>
+          </h2>
         </motion.div>
 
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-12">
@@ -115,8 +98,7 @@ export default function ResumeSection() {
                 {timeline.map((node, index) => (
                   <motion.div
                     key={node.key}
-                    initial={{ opacity: 0, x: -50 }}
-                    whileInView={{ opacity: 1, x: 0 }}
+                    whileInView={{ opacity: 1 }}
                     viewport={{ once: true }}
                     transition={{ delay: index * 0.1 }}
                     className="relative pl-12"
@@ -134,9 +116,9 @@ export default function ResumeSection() {
                       {/* Role & Company */}
                       <div className="flex items-start justify-between mb-4">
                         <div>
-                          <h4 className="font-display text-xl font-bold text-white mb-1">
+                          <h3 lang="en" className="font-display text-xl font-bold text-white mb-1">
                             {node.role}
-                          </h4>
+                          </h3>
                           <div className="flex items-center space-x-2 text-[#E8E8E8]">
                             <Briefcase aria-hidden="true" className="w-4 h-4" />
                             <span className="font-body">{node.company}</span>
@@ -176,21 +158,19 @@ export default function ResumeSection() {
           <div className="space-y-8">
             {/* Skills */}
             <motion.div
-              initial={{ opacity: 0, x: 50 }}
-              whileInView={{ opacity: 1, x: 0 }}
+              whileInView={{ opacity: 1 }}
               viewport={{ once: true }}
               className="glass rounded-xl p-6 border border-[#00FFFF]/20"
             >
-              <h4 className="font-display text-2xl font-bold text-white mb-6 flex items-center">
+              <h3 className="font-display text-2xl font-bold text-white mb-6 flex items-center">
                 <Award aria-hidden="true" className="w-6 h-6 mr-2 text-[#00FFFF]" />
                 {t.resume.skills}
-              </h4>
+              </h3>
 
               <div className="space-y-5">
                 {skills.map((skill, index) => (
                   <motion.div
                     key={skill.category}
-                    initial={{ opacity: 0, y: 16 }}
                     whileInView={{ opacity: 1, y: 0 }}
                     viewport={{ once: true }}
                     transition={{ delay: index * 0.1 }}
@@ -201,7 +181,7 @@ export default function ResumeSection() {
                     <motion.div
                       className="flex flex-wrap gap-2"
                       variants={tagContainerVariants}
-                      initial="hidden"
+                    initial={false}
                       whileInView="visible"
                       viewport={{ once: true }}
                     >
@@ -229,21 +209,26 @@ export default function ResumeSection() {
 
             {/* Currently Learning */}
             <motion.div
-              initial={{ opacity: 0, x: 50 }}
-              whileInView={{ opacity: 1, x: 0 }}
+              whileInView={{ opacity: 1 }}
               viewport={{ once: true }}
               transition={{ delay: 0.3 }}
               className="glass rounded-xl p-6 border border-[#FF00AA]/20 box-glow-magenta"
             >
-              <h4 className="font-display text-xl font-bold text-white mb-4">
+              <h3 className="font-display text-xl font-bold text-white mb-4">
                 {t.resume.currentlyLearning}
-              </h4>
+              </h3>
               <div className="space-y-3">
-                <div className="flex items-center justify-between">
+                <a
+                  href="https://www.credly.com/badges/ebdbc513-5d75-435b-baa0-35fc7a3bf0a9"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  aria-label={t.accessibility.externalLink(`${t.resume.viewBadge}: CKAD Certification on Credly`)}
+                  className="flex min-h-11 items-center justify-between gap-3 py-2 hover:text-[#00FFFF] transition-colors"
+                >
                   <span className="font-terminal text-sm text-[#E8E8E8]">CKAD Certification</span>
-                  <span className="font-terminal text-xs text-[#00FFFF]">{t.resume.certified}</span>
-                </div>
-                <div className="w-full h-2 bg-[#1a1a1a] rounded-full overflow-hidden">
+                  <span className="font-terminal text-xs text-[#00FFFF]">{t.resume.certified} · {t.resume.viewBadge}</span>
+                </a>
+                <div aria-hidden="true" className="w-full h-2 bg-[#1a1a1a] rounded-full overflow-hidden">
                   <motion.div
                     initial={{ width: 0 }}
                     whileInView={{ width: '100%' }}
@@ -253,12 +238,31 @@ export default function ResumeSection() {
                   />
                 </div>
               </div>
+              <a
+                href="https://www.credly.com/badges/7c3203ac-9377-4dcf-a6df-dda32639225b"
+                target="_blank"
+                rel="noopener noreferrer"
+                aria-label={t.accessibility.externalLink(`${t.resume.viewBadge}: Claude Developer Certification on Credly`)}
+                className="mt-4 flex min-h-11 items-center justify-between gap-3 py-2 hover:text-[#00FFFF] transition-colors"
+              >
+                <span className="font-terminal text-sm text-[#E8E8E8]">Claude Developer Certification</span>
+                <span className="font-terminal text-xs text-[#00FFFF]">{t.resume.viewBadge}</span>
+              </a>
+              <div aria-hidden="true" className="w-full h-2 bg-[#1a1a1a] rounded-full overflow-hidden mt-3">
+                <motion.div
+                  initial={{ width: 0 }}
+                  whileInView={{ width: '100%' }}
+                  viewport={{ once: true }}
+                  transition={{ duration: 1 }}
+                  className="h-full bg-[#00FFFF]"
+                />
+              </div>
               <div className="space-y-3 mt-3">
                 <div className="flex items-center justify-between">
                   <span className="font-terminal text-sm text-[#E8E8E8]">SpringBoot WebFlux</span>
                   <span className="font-terminal text-xs text-[#00FF66]">{t.resume.inProgress}</span>
                 </div>
-                <div className="w-full h-2 bg-[#1a1a1a] rounded-full overflow-hidden">
+                <div aria-hidden="true" className="w-full h-2 bg-[#1a1a1a] rounded-full overflow-hidden">
                   <motion.div
                     initial={{ width: 0 }}
                     whileInView={{ width: '50%' }}
@@ -273,7 +277,7 @@ export default function ResumeSection() {
                   <span className="font-terminal text-sm text-[#E8E8E8]">Terraform</span>
                   <span className="font-terminal text-xs text-[#00FF66]">{t.resume.inProgress}</span>
                 </div>
-                <div className="w-full h-2 bg-[#1a1a1a] rounded-full overflow-hidden">
+                <div aria-hidden="true" className="w-full h-2 bg-[#1a1a1a] rounded-full overflow-hidden">
                   <motion.div
                     initial={{ width: 0 }}
                     whileInView={{ width: '10%' }}
@@ -287,52 +291,31 @@ export default function ResumeSection() {
 
             {/* Download Resume */}
             <motion.div
-              initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ delay: 0.4 }}
-              className="relative w-full"
+              className="w-full"
             >
-              <button
-                onClick={() => setDropdownOpen((o) => !o)}
-                aria-haspopup="menu"
-                aria-expanded={dropdownOpen}
-                className="w-full font-terminal px-6 py-4 bg-transparent border-2 border-[#00FFFF] text-[#00FFFF] rounded-lg hover:bg-[#00FFFF] hover:text-[#0D0D0D] box-glow-cyan transition-all duration-300 flex items-center justify-center space-x-2"
-              >
-                <Download aria-hidden="true" className="w-5 h-5" />
-                <span>{t.resume.printBlueprint}</span>
-                <ChevronDown aria-hidden="true" className={`w-4 h-4 ml-1 transition-transform duration-200 ${dropdownOpen ? 'rotate-180' : ''}`} />
-              </button>
-              <AnimatePresence>
-                {dropdownOpen && (
-                  <motion.div
-                    role="menu"
-                    onKeyDown={handleDropdownKeyDown}
-                    initial={{ opacity: 0, y: -6 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    exit={{ opacity: 0, y: -6 }}
-                    transition={{ duration: 0.15 }}
-                    className="absolute bottom-full mb-2 left-0 w-full glass border border-[#00FFFF]/40 rounded-lg overflow-hidden z-10"
-                  >
-                    {(['en', 'fr'] as const).map((lang) => (
-                      <button
-                        key={lang}
-                        role="menuitem"
-                        onClick={() => handleDownload(lang)}
-                        className={`w-full flex items-center space-x-3 px-5 py-3 font-terminal text-sm transition-colors duration-150
-                          ${lang === currentLang
-                            ? 'text-[#00FFFF] bg-[#00FFFF]/10'
-                            : 'text-[#888888] hover:text-[#00FFFF] hover:bg-[#00FFFF]/5'
-                          }`}
-                      >
-                        <span className="uppercase tracking-widest text-xs opacity-60">{lang}</span>
-                        <span>{lang === 'en' ? t.resume.downloadEn : t.resume.downloadFr}</span>
-                        {lang === currentLang && <span className="ml-auto text-[10px] opacity-50">✓</span>}
-                      </button>
-                    ))}
-                  </motion.div>
-                )}
-              </AnimatePresence>
+              <details className="resume-download">
+                <summary className="w-full cursor-pointer list-none font-terminal px-6 py-4 bg-transparent border-2 border-[#00FFFF] text-[#00FFFF] rounded-lg hover:bg-[#00FFFF] hover:text-[#0D0D0D] box-glow-cyan transition-all duration-300 flex items-center justify-center gap-2">
+                  <Download aria-hidden="true" className="w-5 h-5" />
+                  <span>{t.resume.printBlueprint}</span>
+                  <ChevronDown aria-hidden="true" className="w-4 h-4" />
+                </summary>
+                <div className="mt-2 grid gap-2 rounded-lg border border-[#00FFFF]/40 bg-[#1a1a1a] p-2">
+                  {(['en', 'fr'] as const).map((lang) => (
+                    <a
+                      key={lang}
+                      href={`/lucasmacori_resume_${lang}.pdf`}
+                      download
+                      lang={lang}
+                      className="flex min-h-11 items-center gap-3 rounded px-4 py-2 font-terminal text-sm text-[#E8E8E8] underline underline-offset-4 hover:text-[#00FFFF] focus-visible:outline-offset-2"
+                    >
+                      <span>{lang === 'en' ? t.resume.downloadEn : t.resume.downloadFr}</span>
+                    </a>
+                  ))}
+                </div>
+              </details>
             </motion.div>
           </div>
         </div>

@@ -10,6 +10,7 @@
 
   .font-display {
     font-family: 'Space Grotesk', sans-serif;
+    overflow-wrap: anywhere;
   }
 
   .font-body {
@@ -20,15 +21,15 @@
   .text-gradient-cyan-magenta {
     background: linear-gradient(135deg, #00FFFF 0%, #FF00AA 100%);
     -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
     background-clip: text;
+    color: #00FFFF;
   }
 
   .text-gradient-magenta-purple {
-    background: linear-gradient(135deg, #FF00AA 0%, #9945FF 100%);
+    background: linear-gradient(135deg, #FF00AA 0%, #B18CFF 100%);
     -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
     background-clip: text;
+    color: #FF00AA;
   }
 
   /* 3D transform */

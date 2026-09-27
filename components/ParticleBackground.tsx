@@ -1,13 +1,22 @@
 'use client';
 
 import { useEffect, useRef } from 'react';
+import { useReducedMotion } from 'motion/react';
+import { useAnimationPreference } from '@/contexts/AnimationContext';
 
 export default function ParticleBackground() {
   const canvasRef = useRef<HTMLCanvasElement>(null);
+  const prefersReducedMotion = useReducedMotion();
+  const { paused } = useAnimationPreference();
 
   useEffect(() => {
     const canvas = canvasRef.current;
-    if (!canvas) return;
+    if (canvas) canvas.dataset.animationPaused = String(paused || prefersReducedMotion);
+  }, [paused, prefersReducedMotion]);
+
+  useEffect(() => {
+    const canvas = canvasRef.current;
+    if (!canvas || prefersReducedMotion || paused) return;
 
     const ctx = canvas.getContext('2d');
     if (!ctx) return;
@@ -77,13 +86,13 @@ export default function ParticleBackground() {
       window.removeEventListener('resize', setCanvasSize);
       cancelAnimationFrame(animationId);
     };
-  }, []);
+  }, [prefersReducedMotion, paused]);
 
   return (
     <canvas
       ref={canvasRef}
       aria-hidden="true"
-      className="fixed inset-0 pointer-events-none z-0"
+      className="fixed inset-0 pointer-events-none z-0 particle-background"
       style={{ opacity: 0.3 }}
     />
   );

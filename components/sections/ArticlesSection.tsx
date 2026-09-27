@@ -58,46 +58,44 @@ export default function ArticlesSection() {
       case 'frontend':
         return 'text-[#00FF66] border-[#00FF66]';
       case 'backend':
-        return 'text-[#9945FF] border-[#9945FF]';
+        return 'text-[#B18CFF] border-[#B18CFF]';
       default:
         return 'text-[#00FFFF] border-[#00FFFF]';
     }
   };
 
   return (
-    <section id="articles" className="relative py-24 px-4 sm:px-6 lg:px-8 min-h-screen">
+    <section id="articles" aria-labelledby="articles-title" className="relative py-24 px-4 sm:px-6 lg:px-8 min-h-screen">
       <div className="max-w-7xl mx-auto">
         {/* Section Title */}
         <motion.div
-          initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           className="mb-16"
         >
-          <h2 className="font-terminal text-[#00FFFF] text-xl mb-2 glow-cyan">
+          <p className="font-terminal text-[#00FFFF] text-xl mb-2 glow-cyan" aria-hidden="true">
             {t.articles.command}
-          </h2>
-          <h3 className="font-display text-5xl md:text-6xl font-black text-white">
+          </p>
+          <h2 id="articles-title" className="font-display text-4xl md:text-6xl font-black text-white">
             {t.articles.title} <span className="text-gradient-magenta-purple">{t.articles.titleAccent}</span>
-          </h3>
+          </h2>
         </motion.div>
 
         {/* Articles List */}
-        <div className="space-y-6">
+        <ul className="space-y-6">
           {articles.map((article, index) => (
-            <a
-              key={article.title}
-              href={article.url}
-              className="p-6"
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              <motion.div
-                initial={{ opacity: 0, x: -50 }}
-                whileInView={{ opacity: 1, x: 0 }}
+            <li key={article.title}>
+              <a
+                href={article.url}
+                target="_blank"
+                rel="noopener noreferrer"
+                aria-label={t.accessibility.readArticle(article.title)}
+                className="block"
+              >
+                <motion.div
+                whileInView={{ opacity: 1 }}
                 viewport={{ once: true }}
                 transition={{ delay: index * 0.1 }}
-                whileHover={{ x: 10 }}
                 className={`glass rounded-xl p-6 border transition-all duration-300 cursor-pointer relative overflow-hidden ${article.featured
                   ? 'border-[#FF00AA] box-glow-magenta'
                   : 'border-[#00FFFF]/20 hover:border-[#00FFFF] hover:box-glow-cyan'
@@ -126,40 +124,27 @@ export default function ArticlesSection() {
                     </div>
 
                     {/* Title */}
-                    <h4 className="font-display text-2xl font-bold text-white mb-2 hover:text-gradient-cyan-magenta transition-all">
-                      {article.title}
-                    </h4>
+                      <h3 className="font-display text-2xl font-bold text-white mb-2 underline decoration-[#00FFFF] underline-offset-4 hover:text-gradient-cyan-magenta transition-all" lang="fr">
+                        {article.title}
+                      </h3>
 
                     {/* Metadata */}
                     <div className="flex flex-wrap items-center gap-4 font-terminal text-xs text-[#888888]">
-                      <span>[ {article.date} ]</span>
+                      <time dateTime={article.date.replace(/\./g, '-')}>[ {article.date} ]</time>
                       <span>•</span>
                       <span>{t.articles.readTime(article.readTime)}</span>
                     </div>
                   </div>
 
-                  {/* Reading Progress Bar */}
-                  <div className="md:w-32">
-                    <div className="font-terminal text-xs text-[#888888] mb-2">{t.articles.progress}</div>
-                    <div className="w-full bg-[#1a1a1a] rounded-full h-2">
-                      <motion.div
-                        initial={{ width: 0 }}
-                        whileInView={{ width: '0%' }}
-                        whileHover={{ width: '100%' }}
-                        transition={{ duration: 0.8 }}
-                        className="h-full rounded-full bg-gradient-to-r from-[#00FFFF] to-[#FF00AA]"
-                      />
-                    </div>
-                  </div>
                 </div>
-              </motion.div>
-            </a>
+                </motion.div>
+              </a>
+            </li>
           ))}
-        </div>
+        </ul>
 
         {/* View All Link */}
         <motion.div
-          initial={{ opacity: 0 }}
           whileInView={{ opacity: 1 }}
           viewport={{ once: true }}
           transition={{ delay: 0.6 }}

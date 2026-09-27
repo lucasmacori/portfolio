@@ -2,8 +2,10 @@
 
 import { useEffect, useState } from 'react';
 import { motion } from 'motion/react';
+import { useAnimationPreference } from '@/contexts/AnimationContext';
 
 export default function CustomCursor() {
+  const { paused } = useAnimationPreference();
   const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
   const [isHovering, setIsHovering] = useState(false);
 
@@ -35,11 +37,13 @@ export default function CustomCursor() {
     };
   }, []);
 
+  if (paused) return null;
+
   return (
     <>
       {/* Main Cursor */}
       <motion.div
-        className="fixed pointer-events-none z-50 mix-blend-difference hidden md:block"
+        className="custom-cursor fixed pointer-events-none z-50 mix-blend-difference hidden md:block"
         animate={{
           x: mousePosition.x - 10,
           y: mousePosition.y - 10,
@@ -56,7 +60,7 @@ export default function CustomCursor() {
 
       {/* Trailing Cursor */}
       <motion.div
-        className="fixed pointer-events-none z-50 mix-blend-difference hidden md:block"
+        className="custom-cursor fixed pointer-events-none z-50 mix-blend-difference hidden md:block"
         animate={{
           x: mousePosition.x - 4,
           y: mousePosition.y - 4,

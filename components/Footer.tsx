@@ -3,6 +3,7 @@
 import { motion } from 'motion/react';
 import { Coffee } from 'lucide-react';
 import { useTranslations } from '@/contexts/LanguageContext';
+import AnimationToggle from '@/components/AnimationToggle';
 
 export default function Footer({ version }: { version: string }) {
   const t = useTranslations();
@@ -12,7 +13,6 @@ export default function Footer({ version }: { version: string }) {
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-8">
           {/* Left: Built With */}
           <motion.div
-            initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             className="text-center md:text-left"
@@ -21,11 +21,13 @@ export default function Footer({ version }: { version: string }) {
               <span>{t.footer.builtWith}</span>
               <Coffee aria-hidden="true" className="w-4 h-4 text-[#FF6B00]" />
             </p>
+            <div className="mt-3 flex justify-center md:justify-start">
+              <AnimationToggle />
+            </div>
           </motion.div>
 
           {/* Center: Copyright */}
           <motion.div
-            initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ delay: 0.1 }}
@@ -38,7 +40,6 @@ export default function Footer({ version }: { version: string }) {
 
           {/* Right: Version */}
           <motion.div
-            initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ delay: 0.2 }}

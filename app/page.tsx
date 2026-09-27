@@ -12,6 +12,7 @@ import KonamiCode from '@/components/KonamiCodeLoader';
 import ScrollProgress from '@/components/ScrollProgress';
 import ParticleBackground from '@/components/ParticleBackground';
 import BackToTop from '@/components/BackToTop';
+import SkipLink from '@/components/SkipLink';
 
 async function getPublicRepos(): Promise<number | null> {
   try {
@@ -28,14 +29,15 @@ async function getPublicRepos(): Promise<number | null> {
 export default async function Home() {
   const publicRepos = await getPublicRepos();
   return (
-    <div className="min-h-screen bg-[#0D0D0D] overflow-x-hidden relative">
+    <div className="min-h-screen bg-[#0D0D0D] relative">
+      <SkipLink />
       <ParticleBackground />
       <ScrollProgress />
       <CustomCursor />
       <KonamiCode />
       <BackToTop />
       <Navigation />
-      <main>
+      <main id="main-content" tabIndex={-1}>
         <HeroSection />
         <ProjectsSection />
         <ArticlesSection />

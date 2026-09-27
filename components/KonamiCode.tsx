@@ -9,6 +9,8 @@ const KONAMI_CODE = [
   'b', 'a',
 ];
 
+const LUCAS_NOTES = 'https://www.youtube.com/watch?v=dQw4w9WgXcQ&list=RDdQw4w9WgXcQ';
+
 // ---------------------------------------------------------------------------
 // Virtual filesystem
 // ---------------------------------------------------------------------------
@@ -155,6 +157,7 @@ function runCommand(
       { text: '' },
       { text: '  ls              List directory contents' },
       { text: '  cd <dir>        Change directory  (e.g. cd usr, cd ..)' },
+      { text: '  cat <file>      Print file contents' },
       { text: '  help            Show this help message' },
       { text: '  exit            Return to the portfolio' },
     ];
@@ -195,6 +198,15 @@ function runCommand(
     return [{ text: `cd: ${target}: No such directory`, color: '#FF6666' }];
   }
 
+  if (
+    cmd === 'cat' &&
+    args.length === 1 &&
+    args[0] === 'notes.txt' &&
+    formatPath(cwd) === '/usr/lucas'
+  ) {
+    return [{ text: LUCAS_NOTES }];
+  }
+
   return [{ text: `Unknown command: ${trimmed}`, color: '#888888' }];
 }
 
@@ -218,6 +230,7 @@ export default function KonamiCode({ initialPhase = 'idle' }: { initialPhase?: P
   const [cmdHistory, setCmdHistory] = useState<CmdEntry[]>([]);
   const inputRef  = useRef<HTMLInputElement>(null);
   const bottomRef = useRef<HTMLDivElement>(null);
+  const dialogRef = useRef<HTMLDialogElement>(null);
 
   // Konami code detection — only while idle
   useEffect(() => {
@@ -260,6 +273,15 @@ export default function KonamiCode({ initialPhase = 'idle' }: { initialPhase?: P
     return () => clearTimeout(t);
   }, [phase]);
 
+  useEffect(() => {
+    const dialog = dialogRef.current;
+    if (phase !== 'terminal' || !dialog || dialog.open) return;
+    dialog.showModal();
+    return () => {
+      if (dialog.open) dialog.close();
+    };
+  }, [phase]);
+
   // Boot sequence
   useEffect(() => {
     if (!isBooting) return;
@@ -297,6 +319,12 @@ export default function KonamiCode({ initialPhase = 'idle' }: { initialPhase?: P
     setInput('');
     setCwd([]);
     setIsBooting(false);
+  };
+
+  const focusCommandInput = () => {
+    const selection = window.getSelection();
+    if (selection && !selection.isCollapsed) return;
+    inputRef.current?.focus();
   };
 
   const handleInputKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
@@ -358,19 +386,20 @@ export default function KonamiCode({ initialPhase = 'idle' }: { initialPhase?: P
       {/* Terminal */}
       <AnimatePresence>
         {phase === 'terminal' && (
-          <motion.div
+          <dialog
+            ref={dialogRef}
             key="terminal"
-            role="dialog"
-            aria-modal="true"
-            aria-label="Konami OS terminal"
-            className="fixed inset-0 z-[9999] bg-black overflow-hidden flex flex-col cursor-text"
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            transition={{ duration: 0.2 }}
+            lang="en"
+            aria-labelledby="konami-dialog-title"
+            onClose={exitTerminal}
+            className="fixed inset-0 z-[9999] m-0 h-dvh w-screen max-h-none max-w-none overflow-hidden border-0 bg-black p-0 text-left text-[#00FF41] backdrop:bg-black/90"
             style={{ fontFamily: "'JetBrains Mono', 'Courier New', monospace" }}
-            onClick={() => inputRef.current?.focus()}
+            onClick={focusCommandInput}
           >
+            <h2 id="konami-dialog-title" className="sr-only">Konami OS terminal</h2>
+            <button type="button" onClick={(event) => { event.stopPropagation(); exitTerminal(); }} className="absolute right-4 top-4 z-30 min-h-11 rounded border border-[#00FF41] bg-black px-4 text-[#00FF41] underline underline-offset-4">
+              Exit terminal
+            </button>
             {/* CRT scanlines */}
             <div
               aria-hidden="true"
@@ -433,40 +462,28 @@ export default function KonamiCode({ initialPhase = 'idle' }: { initialPhase?: P
               {/* Active input prompt */}
               {!isBooting && (
                 <div
-                  className="flex items-center text-sm leading-relaxed mt-4"
+                  className="flex flex-wrap items-center text-sm leading-relaxed mt-4"
                   style={{ textShadow: '0 0 8px rgba(0,255,65,0.6)' }}
                 >
-                  <span style={{ color: '#00FF41' }}>{prompt}</span>
-                  <span>{input}</span>
-                  <span> </span>
-                  <motion.span
-                    animate={{ opacity: [1, 1, 0, 0] }}
-                    transition={{ duration: 1, repeat: Infinity, times: [0, 0.5, 0.5, 1], ease: 'linear' }}
-                    style={{ color: '#00FF41' }}
-                  >
-                    █
-                  </motion.span>
+                  <label htmlFor="konami-command" className="shrink-0" style={{ color: '#00FF41' }}>{prompt}</label>
+                  <input
+                    id="konami-command"
+                    ref={inputRef}
+                    value={input}
+                    onChange={(e) => setInput(e.target.value)}
+                    onKeyDown={handleInputKeyDown}
+                    autoComplete="off"
+                    autoCorrect="off"
+                    autoCapitalize="off"
+                    spellCheck={false}
+                    className="min-w-0 flex-1 border-b border-[#00FF41] bg-transparent px-1 text-[#00FF41] focus-visible:outline focus-visible:outline-2 focus-visible:outline-[#00FF41]"
+                  />
                 </div>
               )}
 
               <div ref={bottomRef} />
             </div>
-
-            {/* Hidden input */}
-            <input
-              ref={inputRef}
-              value={input}
-              onChange={(e) => setInput(e.target.value)}
-              onKeyDown={handleInputKeyDown}
-              aria-label="Terminal input"
-              autoComplete="off"
-              autoCorrect="off"
-              autoCapitalize="off"
-              spellCheck={false}
-              className="absolute opacity-0 pointer-events-none"
-              style={{ left: '-9999px', top: '-9999px' }}
-            />
-          </motion.div>
+          </dialog>
         )}
       </AnimatePresence>
     </>

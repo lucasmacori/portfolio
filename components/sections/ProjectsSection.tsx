@@ -31,6 +31,14 @@ const projects: Project[] = [
     link: 'https://github.com/lucasmacori/DAGS',
   },
   {
+    title: '2048 AI Agent Benchmarks',
+    translationKey: '2048AiAgentBenchmarks',
+    tech: ['Python', 'AI', 'Benchmarking'],
+    metrics: [{ label: 'Type', value: 'AI Research' }],
+    status: 'live',
+    link: 'https://github.com/lucasmacori/2048-ai-agent-benchmarks',
+  },
+  {
     title: 'Phrase Auto-Translate',
     translationKey: 'phraseAutoTranslate',
     tech: ['JavaScript', 'DeepL API', 'PhraseApp'],
@@ -76,39 +84,37 @@ export default function ProjectsSection() {
   };
 
   return (
-    <section id="projects" className="relative py-24 px-4 sm:px-6 lg:px-8 min-h-screen">
+    <section id="projects" aria-labelledby="projects-title" className="relative py-24 px-4 sm:px-6 lg:px-8 min-h-screen">
       <div className="max-w-7xl mx-auto">
         {/* Section Title */}
         <motion.div
-          initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           className="mb-16"
         >
-          <h2 className="font-terminal text-[#00FFFF] text-xl mb-2 glow-cyan">
+          <p className="font-terminal text-[#00FFFF] text-xl mb-2 glow-cyan" aria-hidden="true">
             {t.projects.command}
-          </h2>
-          <h3 className="font-display text-5xl md:text-6xl font-black text-white">
+          </p>
+          <h2 id="projects-title" className="font-display text-4xl md:text-6xl font-black text-white">
             {t.projects.title} <span className="text-gradient-cyan-magenta">{t.projects.titleAccent}</span>
-          </h3>
+          </h2>
         </motion.div>
 
         {/* Projects Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <ul className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {projects.map((project, index) => (
-            <motion.a
-              key={project.title}
-              href={project.link}
-              target="_blank"
-              rel="noopener noreferrer"
-              aria-label={`View ${project.title} on GitHub (opens in a new tab)`}
-              initial={{ opacity: 0, y: 50 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ delay: index * 0.1 }}
-              whileHover={{ y: -8 }}
-              className="glass rounded-xl p-6 border border-[#00FFFF]/20 hover:border-[#00FFFF] hover:box-glow-cyan transition-all duration-300 group perspective block"
-            >
+            <li key={project.title}>
+              <motion.a
+                href={project.link}
+                target="_blank"
+                rel="noopener noreferrer"
+                aria-label={t.accessibility.viewProject(project.title)}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ delay: index * 0.1 }}
+                whileHover={{ y: -8 }}
+                className="glass rounded-xl p-6 border border-[#00FFFF]/20 hover:border-[#00FFFF] hover:box-glow-cyan transition-all duration-300 group perspective block"
+              >
               {/* Status Badge */}
               <div className="flex items-center justify-between mb-4">
                 <span
@@ -120,9 +126,9 @@ export default function ProjectsSection() {
               </div>
 
               {/* Project Title */}
-              <h4 className="font-display text-2xl font-bold text-white mb-3 group-hover:text-gradient-cyan-magenta transition-all">
+              <h3 className="font-display text-2xl font-bold text-white mb-3 underline decoration-[#00FFFF] underline-offset-4 group-hover:text-gradient-cyan-magenta transition-all">
                 {project.title}
-              </h4>
+              </h3>
 
               {/* Description */}
               <p className="font-body text-[#E8E8E8] text-sm mb-4 leading-relaxed">
@@ -150,9 +156,10 @@ export default function ProjectsSection() {
                   </div>
                 ))}
               </div>
-            </motion.a>
+              </motion.a>
+            </li>
           ))}
-        </div>
+        </ul>
       </div>
     </section>
   );

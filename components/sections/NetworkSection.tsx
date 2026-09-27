@@ -1,9 +1,10 @@
 'use client';
 
-import { motion } from 'motion/react';
+import { motion, useReducedMotion } from 'motion/react';
 import { Github, Linkedin, Mail, FileText } from 'lucide-react';
 import type { ComponentType } from 'react';
 import { useTranslations } from '@/contexts/LanguageContext';
+import { useAnimationPreference } from '@/contexts/AnimationContext';
 
 interface NetworkNode {
   name: string;
@@ -39,30 +40,31 @@ const nodes: NetworkNode[] = [
     name: 'Blog',
     icon: FileText,
     url: 'https://sfeir.dev/author/lucas/',
-    color: '#9945FF',
+    color: '#B18CFF',
     activity: 'Published at sfeir.dev',
   },
 ];
 
 export default function NetworkSection({ publicRepos }: { publicRepos: number | null }) {
   const t = useTranslations();
+  const prefersReducedMotion = useReducedMotion();
+  const { paused } = useAnimationPreference();
 
   return (
-    <section id="network" className="relative py-24 px-4 sm:px-6 lg:px-8 min-h-screen flex items-center">
+    <section id="network" aria-labelledby="network-title" className="relative py-24 px-4 sm:px-6 lg:px-8 min-h-screen flex items-center">
       <div className="max-w-7xl mx-auto w-full">
         {/* Section Title */}
         <motion.div
-          initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           className="mb-16 text-center"
         >
-          <h2 className="font-terminal text-[#00FFFF] text-xl mb-2 glow-cyan">
+          <p className="font-terminal text-[#00FFFF] text-xl mb-2 glow-cyan" aria-hidden="true">
             {t.network.command}
-          </h2>
-          <h3 className="font-display text-5xl md:text-6xl font-black text-white">
+          </p>
+          <h2 id="network-title" className="font-display text-4xl md:text-6xl font-black text-white">
             {t.network.title} <span className="text-gradient-magenta-purple">{t.network.titleAccent}</span>
-          </h3>
+          </h2>
         </motion.div>
 
         {/* Constellation Network Visualization */}
@@ -107,8 +109,7 @@ export default function NetworkSection({ publicRepos }: { publicRepos: number | 
                   href={node.url}
                   target="_blank"
                   rel="noopener noreferrer"
-                  aria-label={`${node.name} (opens in a new tab)`}
-                  initial={{ opacity: 0, scale: 0 }}
+                  aria-label={t.accessibility.externalLink(node.name)}
                   whileInView={{ opacity: 1, scale: 1 }}
                   viewport={{ once: true }}
                   transition={{ delay: index * 0.15, type: 'spring' }}
@@ -134,7 +135,7 @@ export default function NetworkSection({ publicRepos }: { publicRepos: number | 
                           <Icon aria-hidden="true" className="w-6 h-6" style={{ color: node.color }} />
                         </div>
                         <div>
-                          <h4 className="font-display text-xl font-bold text-white">{node.name}</h4>
+                          <h3 className="font-display text-xl font-bold text-white underline decoration-[#00FFFF] underline-offset-4">{node.name}</h3>
                           <div className="font-terminal text-xs" style={{ color: node.color }}>
                             {t.network.active}
                           </div>
@@ -144,8 +145,8 @@ export default function NetworkSection({ publicRepos }: { publicRepos: number | 
                       {/* Pulse Indicator */}
                       <motion.div
                         aria-hidden="true"
-                        animate={{ scale: [1, 1.2, 1], opacity: [1, 0.5, 1] }}
-                        transition={{ duration: 2, repeat: Infinity }}
+                        animate={prefersReducedMotion || paused ? { scale: 1, opacity: 1 } : { scale: [1, 1.2, 1], opacity: [1, 0.5, 1] }}
+                        transition={prefersReducedMotion || paused ? { duration: 0 } : { duration: 2, repeat: Infinity }}
                         className="w-3 h-3 rounded-full"
                         style={{ backgroundColor: node.color }}
                       />
@@ -170,8 +171,8 @@ export default function NetworkSection({ publicRepos }: { publicRepos: number | 
                     <motion.div
                       className="absolute bottom-0 left-0 h-0.5 opacity-0 group-hover:opacity-100"
                       style={{ backgroundColor: node.color }}
-                      animate={{ width: ['0%', '100%', '0%'] }}
-                      transition={{ duration: 2, repeat: Infinity, ease: 'easeInOut' }}
+                      animate={prefersReducedMotion || paused ? { width: '0%' } : { width: ['0%', '100%', '0%'] }}
+                      transition={prefersReducedMotion || paused ? { duration: 0 } : { duration: 2, repeat: Infinity, ease: 'easeInOut' }}
                     />
                   </div>
                 </motion.a>
@@ -182,7 +183,6 @@ export default function NetworkSection({ publicRepos }: { publicRepos: number | 
           {/* Central Node */}
           <motion.div
             aria-hidden="true"
-            initial={{ opacity: 0, scale: 0 }}
             whileInView={{ opacity: 1, scale: 1 }}
             viewport={{ once: true }}
             transition={{ delay: 0.8, type: 'spring' }}
@@ -197,7 +197,6 @@ export default function NetworkSection({ publicRepos }: { publicRepos: number | 
 
         {/* Additional Info */}
         <motion.div
-          initial={{ opacity: 0 }}
           whileInView={{ opacity: 1 }}
           viewport={{ once: true }}
           transition={{ delay: 1 }}

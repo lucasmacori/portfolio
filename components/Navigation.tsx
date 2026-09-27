@@ -1,174 +1,136 @@
 'use client';
 
-import { useState, useEffect } from 'react';
-import { motion } from 'motion/react';
+import { useEffect, useRef, useState } from 'react';
 import { Menu, X } from 'lucide-react';
-import { useLanguage } from '@/contexts/LanguageContext';
+import { useLanguage, useTranslations } from '@/contexts/LanguageContext';
+
+const navItems = [
+  { id: 'projects', key: 'projects' },
+  { id: 'articles', key: 'articles' },
+  { id: 'resume', key: 'resume' },
+  { id: 'network', key: 'network' },
+  { id: 'contact', key: 'contact' },
+] as const;
 
 export default function Navigation() {
-  const [isScrolled, setIsScrolled] = useState(false);
-  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [activeSection, setActiveSection] = useState('');
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const { lang, setLang } = useLanguage();
+  const t = useTranslations();
+  const dialogRef = useRef<HTMLDialogElement>(null);
+  const menuButtonRef = useRef<HTMLButtonElement>(null);
+  const desktopResizeRef = useRef(false);
 
   useEffect(() => {
-    const handleScroll = () => {
-      setIsScrolled(window.scrollY > 50);
-
-      const sections = ['hero', 'projects', 'articles', 'resume', 'network', 'contact'];
-      for (const section of sections) {
-        const element = document.getElementById(section);
-        if (element) {
-          const rect = element.getBoundingClientRect();
-          if (rect.top <= 100 && rect.bottom >= 100) {
-            setActiveSection(section);
-            break;
-          }
-        }
-      }
-    };
-
-    window.addEventListener('scroll', handleScroll);
-    return () => window.removeEventListener('scroll', handleScroll);
+    const observer = new IntersectionObserver(
+      (entries) => {
+        const visible = entries.filter((entry) => entry.isIntersecting).sort(
+          (a, b) => a.boundingClientRect.top - b.boundingClientRect.top,
+        );
+        if (visible[0]) setActiveSection(visible[0].target.id);
+      },
+      { rootMargin: '-20% 0px -65% 0px' },
+    );
+    navItems.forEach(({ id }) => {
+      const section = document.getElementById(id);
+      if (section) observer.observe(section);
+    });
+    return () => observer.disconnect();
   }, []);
 
-  const scrollToSection = (sectionId: string) => {
-    const element = document.getElementById(sectionId);
-    if (element) {
-      element.scrollIntoView({ behavior: 'smooth' });
-      setIsMobileMenuOpen(false);
-    }
-  };
-
   useEffect(() => {
-    if (!isMobileMenuOpen) return;
-    const handleKeyDown = (e: KeyboardEvent) => {
-      if (e.key === 'Escape') setIsMobileMenuOpen(false);
-    };
-    window.addEventListener('keydown', handleKeyDown);
-    return () => window.removeEventListener('keydown', handleKeyDown);
+    const dialog = dialogRef.current;
+    if (!dialog) return;
+    if (isMobileMenuOpen && !dialog.open) dialog.showModal();
+    if (!isMobileMenuOpen && dialog.open) dialog.close();
   }, [isMobileMenuOpen]);
 
-  const navItems = [
-    { id: 'projects', label: '/projects' },
-    { id: 'articles', label: '/articles' },
-    { id: 'resume', label: '/resume' },
-    { id: 'network', label: '/network' },
-  ];
+  useEffect(() => {
+    const desktop = window.matchMedia('(min-width: 768px)');
+    const closeForDesktop = (event: MediaQueryListEvent) => {
+      if (!event.matches || !dialogRef.current?.open) return;
+      desktopResizeRef.current = true;
+      setIsMobileMenuOpen(false);
+      requestAnimationFrame(() => document.querySelector<HTMLElement>('header nav a[href="#projects"]')?.focus());
+    };
+    desktop.addEventListener('change', closeForDesktop);
+    return () => desktop.removeEventListener('change', closeForDesktop);
+  }, []);
 
-  const LangToggle = () => (
-    <div className="flex items-center space-x-1 font-terminal text-sm">
-      <button
-        onClick={() => setLang('en')}
-        aria-label="Switch to English"
-        className={`px-1 transition-colors duration-200 ${lang === 'en' ? 'text-[#00FFFF] glow-cyan' : 'text-[#888888] hover:text-[#E8E8E8]'}`}
-      >
+  const closeMenu = () => {
+    setIsMobileMenuOpen(false);
+    requestAnimationFrame(() => menuButtonRef.current?.focus());
+  };
+
+  const languageButtons = (
+    <div className="flex items-center gap-2" role="group" aria-label={t.accessibility.language}>
+      <button type="button" onClick={() => setLang('en')} aria-label={t.accessibility.english} aria-pressed={lang === 'en'} className="language-button">
         EN
       </button>
-      <span className="text-[#444444]">|</span>
-      <button
-        onClick={() => setLang('fr')}
-        aria-label="Passer en français"
-        className={`px-1 transition-colors duration-200 ${lang === 'fr' ? 'text-[#00FFFF] glow-cyan' : 'text-[#888888] hover:text-[#E8E8E8]'}`}
-      >
+      <button type="button" onClick={() => setLang('fr')} aria-label={t.accessibility.french} aria-pressed={lang === 'fr'} className="language-button">
         FR
       </button>
     </div>
   );
 
   return (
-    <>
-      <motion.nav
-        initial={{ y: -100 }}
-        animate={{ y: 0 }}
-        className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
-          isScrolled ? 'glass-strong' : 'bg-transparent'
-        }`}
-      >
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex items-center justify-between h-16">
-            {/* Logo */}
+    <header className="fixed top-0 left-0 right-0 z-50 border-b border-white/10 bg-[#0D0D0D]/95 backdrop-blur">
+      <nav aria-label={t.accessibility.navigation} className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="flex items-center justify-between min-h-16 gap-4">
+          <a href="#hero" aria-label={t.navigation.home} className="font-terminal text-xl text-[#00FFFF] focus-visible:outline-offset-4">
+            ~/lucas
+          </a>
+          <div className="hidden md:flex items-center gap-5">
+            {navItems.map(({ id, key }) => (
+              <a key={id} href={`#${id}`} aria-current={activeSection === id ? 'location' : undefined} className="nav-link">
+                {t.navigation[key]}
+              </a>
+            ))}
+            {languageButtons}
+          </div>
+          <div className="md:hidden flex items-center gap-3">
+            {languageButtons}
             <button
-              onClick={() => scrollToSection('hero')}
-              aria-label="Go to top"
-              className="font-terminal text-xl glow-cyan hover:glow-magenta transition-all duration-300"
+              ref={menuButtonRef}
+              type="button"
+              onClick={() => setIsMobileMenuOpen(true)}
+              aria-label={t.accessibility.openMenu}
+              aria-haspopup="dialog"
+              className="min-w-11 min-h-11 inline-flex items-center justify-center text-[#00FFFF]"
             >
-              ~/lucas
+              <Menu aria-hidden="true" size={24} />
             </button>
-
-            {/* Desktop Navigation */}
-            <div className="hidden md:flex items-center space-x-8">
-              {navItems.map((item) => (
-                <button
-                  key={item.id}
-                  onClick={() => scrollToSection(item.id)}
-                  aria-current={activeSection === item.id ? 'true' : undefined}
-                  className={`font-terminal relative transition-colors duration-300 ${
-                    activeSection === item.id
-                      ? 'text-[#00FFFF] glow-cyan'
-                      : 'text-[#E8E8E8] hover:text-[#00FFFF]'
-                  }`}
-                >
-                  {item.label}
-                  {activeSection === item.id && (
-                    <motion.div
-                      layoutId="activeSection"
-                      className="absolute -bottom-1 left-0 right-0 h-0.5 bg-[#00FFFF] glow-cyan"
-                    />
-                  )}
-                </button>
-              ))}
-              <LangToggle />
-            </div>
-
-            {/* Mobile: lang toggle + hamburger */}
-            <div className="md:hidden flex items-center space-x-4">
-              <LangToggle />
-              <button
-                onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-                aria-label={isMobileMenuOpen ? 'Close navigation menu' : 'Open navigation menu'}
-                aria-expanded={isMobileMenuOpen}
-                aria-controls="mobile-menu"
-                className="text-[#00FFFF] hover:text-[#FF00AA] transition-colors"
-              >
-                {isMobileMenuOpen
-                  ? <X aria-hidden="true" size={24} />
-                  : <Menu aria-hidden="true" size={24} />
-                }
-              </button>
-            </div>
           </div>
         </div>
-      </motion.nav>
+      </nav>
 
-      {/* Mobile Menu Overlay */}
-      {isMobileMenuOpen && (
-        <motion.div
-          id="mobile-menu"
-          role="dialog"
-          aria-modal="true"
-          aria-label="Navigation menu"
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          exit={{ opacity: 0 }}
-          className="fixed inset-0 z-40 bg-[#0D0D0D] md:hidden flex items-center justify-center"
-        >
-          <div className="flex flex-col items-center space-y-8">
-            {navItems.map((item, index) => (
-              <motion.button
-                key={item.id}
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: index * 0.1 }}
-                onClick={() => scrollToSection(item.id)}
-                className="font-terminal text-3xl text-[#00FFFF] hover:text-[#FF00AA] glow-cyan transition-all duration-300"
-              >
-                {item.label}
-              </motion.button>
-            ))}
-          </div>
-        </motion.div>
-      )}
-    </>
+      <dialog
+        ref={dialogRef}
+        aria-label={t.accessibility.navigation}
+        onClose={() => {
+          setIsMobileMenuOpen(false);
+          if (desktopResizeRef.current) {
+            desktopResizeRef.current = false;
+            return;
+          }
+          requestAnimationFrame(() => menuButtonRef.current?.focus());
+        }}
+        onClick={(event) => {
+          if (event.target === dialogRef.current) closeMenu();
+        }}
+        className="mobile-navigation-dialog fixed inset-0 m-0 h-dvh w-screen max-h-none max-w-none border-0 bg-[#0D0D0D] p-6 text-white backdrop:bg-black/80 md:hidden"
+      >
+        <div className="flex h-full flex-col items-center justify-center gap-8">
+          <button type="button" onClick={closeMenu} aria-label={t.accessibility.closeMenu} className="absolute right-5 top-5 min-w-11 min-h-11 inline-flex items-center justify-center text-[#00FFFF]">
+            <X aria-hidden="true" size={24} />
+          </button>
+          {navItems.map(({ id, key }) => (
+            <a key={id} href={`#${id}`} onClick={closeMenu} className="font-terminal text-2xl text-[#00FFFF]">
+              {t.navigation[key]}
+            </a>
+          ))}
+        </div>
+      </dialog>
+    </header>
   );
 }
