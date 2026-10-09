@@ -2,7 +2,7 @@
 # Stage 1 — deps
 # Install production dependencies only
 # ============================================================
-FROM node:22-alpine AS deps
+FROM node:25-alpine AS deps
 
 RUN apk add --no-cache libc6-compat
 
@@ -16,7 +16,7 @@ RUN npm ci
 # Stage 2 — builder
 # Build the Next.js application
 # ============================================================
-FROM node:22-alpine AS builder
+FROM node:25-alpine AS builder
 
 WORKDIR /app
 
@@ -34,7 +34,7 @@ RUN npm run build
 # Stage 3 — runner
 # Minimal production image using Next.js standalone output
 # ============================================================
-FROM node:22-alpine AS runner
+FROM node:25-alpine AS runner
 
 WORKDIR /app
 
