@@ -4,8 +4,8 @@
 
 - Use Node 22 and npm; the Docker build uses `node:22-alpine`, and `package-lock.json` is authoritative.
 - Install reproducibly with `npm ci`; start locally with `npm run dev` on port 3000.
-- Run `npx tsc --noEmit` for focused type checking, then `npm run build` for final verification. There is no test suite.
-- Do not rely on `npm run lint`: it still invokes the removed Next.js 16 `next lint` command and currently fails. There is no ESLint configuration yet.
+- Run `npm run typecheck` for focused type checking, then `npm run build` for final verification. Run `npm run test:a11y` for the Playwright accessibility suite.
+- Run `npm run lint` for Biome's static analysis. Existing advisory-level findings are reported as warnings while new recommended-rule errors fail the command.
 - `npm run build` may warn about an unrelated lockfile above this repository; this comes from Next.js workspace-root inference, not this project. The build output is a standalone server used by `Dockerfile`.
 
 ## Application wiring

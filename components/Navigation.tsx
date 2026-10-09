@@ -12,7 +12,7 @@ const navItems = [
   { id: 'contact', key: 'contact' },
 ] as const;
 
-export default function Navigation() {
+export default function Navigation({ compact = false }: { compact?: boolean }) {
   const [activeSection, setActiveSection] = useState('');
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const { lang, setLang } = useLanguage();
@@ -77,34 +77,38 @@ export default function Navigation() {
     <header className="fixed top-0 left-0 right-0 z-50 border-b border-white/10 bg-[#0D0D0D]/95 backdrop-blur">
       <nav aria-label={t.accessibility.navigation} className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between min-h-16 gap-4">
-          <a href="#hero" aria-label={t.navigation.home} className="font-terminal text-xl text-[#00FFFF] focus-visible:outline-offset-4">
+          <a href={compact ? '/' : '#hero'} aria-label={t.navigation.home} className="font-terminal text-xl text-[#00FFFF] focus-visible:outline-offset-4">
             ~/lucas
           </a>
-          <div className="hidden md:flex items-center gap-5">
-            {navItems.map(({ id, key }) => (
-              <a key={id} href={`#${id}`} aria-current={activeSection === id ? 'location' : undefined} className="nav-link">
-                {t.navigation[key]}
-              </a>
-            ))}
-            {languageButtons}
-          </div>
-          <div className="md:hidden flex items-center gap-3">
-            {languageButtons}
-            <button
-              ref={menuButtonRef}
-              type="button"
-              onClick={() => setIsMobileMenuOpen(true)}
-              aria-label={t.accessibility.openMenu}
-              aria-haspopup="dialog"
-              className="min-w-11 min-h-11 inline-flex items-center justify-center text-[#00FFFF]"
-            >
-              <Menu aria-hidden="true" size={24} />
-            </button>
-          </div>
+          {compact ? languageButtons : (
+            <>
+              <div className="hidden md:flex items-center gap-5">
+                {navItems.map(({ id, key }) => (
+                  <a key={id} href={`#${id}`} aria-current={activeSection === id ? 'location' : undefined} className="nav-link">
+                    {t.navigation[key]}
+                  </a>
+                ))}
+                {languageButtons}
+              </div>
+              <div className="md:hidden flex items-center gap-3">
+                {languageButtons}
+                <button
+                  ref={menuButtonRef}
+                  type="button"
+                  onClick={() => setIsMobileMenuOpen(true)}
+                  aria-label={t.accessibility.openMenu}
+                  aria-haspopup="dialog"
+                  className="min-w-11 min-h-11 inline-flex items-center justify-center text-[#00FFFF]"
+                >
+                  <Menu aria-hidden="true" size={24} />
+                </button>
+              </div>
+            </>
+          )}
         </div>
       </nav>
 
-      <dialog
+      {!compact && <dialog
         ref={dialogRef}
         aria-label={t.accessibility.navigation}
         onClose={() => {
@@ -130,7 +134,7 @@ export default function Navigation() {
             </a>
           ))}
         </div>
-      </dialog>
+      </dialog>}
     </header>
   );
 }

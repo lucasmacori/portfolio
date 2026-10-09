@@ -1,14 +1,15 @@
 'use client';
 
 import { motion, useReducedMotion } from 'motion/react';
-import { Github, Linkedin, Mail, FileText } from 'lucide-react';
-import type { ComponentType } from 'react';
+import { Mail, FileText } from 'lucide-react';
+import type { ComponentType, SVGProps } from 'react';
 import { useTranslations } from '@/contexts/LanguageContext';
 import { useAnimationPreference } from '@/contexts/AnimationContext';
+import { GitHubIcon, LinkedInIcon } from '@/components/icons/BrandIcons';
 
 interface NetworkNode {
   name: string;
-  icon: ComponentType<{ className?: string; style?: React.CSSProperties }>;
+  icon: ComponentType<SVGProps<SVGSVGElement>>;
   url: string;
   color: string;
   activity?: string;
@@ -17,14 +18,14 @@ interface NetworkNode {
 const nodes: NetworkNode[] = [
   {
     name: 'GitHub',
-    icon: Github,
+    icon: GitHubIcon,
     url: 'https://github.com/lucasmacori',
     color: '#00FFFF',
     activity: 'placeholder',
   },
   {
     name: 'LinkedIn',
-    icon: Linkedin,
+    icon: LinkedInIcon,
     url: 'https://linkedin.com/in/lucas-macori-56b445223',
     color: '#FF00AA',
     activity: 'Active daily',

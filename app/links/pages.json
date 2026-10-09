@@ -1,0 +1,32 @@
+[
+  {
+    "slug": "votre-llm-est-trop-gros-pour-decider",
+    "title": {
+      "en": "Your LLM is too big to decide",
+      "fr": "Votre LLM est trop gros pour décider"
+    },
+    "links": [
+      {
+        "label": {
+          "en": "2048 Project",
+          "fr": "Projet 2048"
+        },
+        "href": "https://github.com/lucasmacori/2048-ai-agent-benchmarks"
+      },
+      {
+        "label": {
+          "en": "Slides",
+          "fr": "Slides"
+        },
+        "href": "https://drive.google.com/file/d/1jkbzLi9COmThGmhCuiD3b01bo5sz-w-N/view?usp=share_link"
+      },
+      {
+        "label": {
+          "en": "My website",
+          "fr": "Mon site web"
+        },
+        "href": "https://lucasmacori.fr"
+      }
+    ]
+  }
+]

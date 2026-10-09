@@ -1,6 +1,6 @@
 # Lucas Macori — Portfolio
 
-Personal portfolio built with Next.js 15, Tailwind CSS v4, and Framer Motion.
+Personal portfolio built with Next.js 16, React 19, Tailwind CSS v4, and Motion.
 
 Accessible at [lucasmacori.fr](https://lucasmacori.fr).
 
@@ -11,7 +11,7 @@ Accessible at [lucasmacori.fr](https://lucasmacori.fr).
 ### 1. Install dependencies
 
 ```bash
-npm install
+npm ci
 ```
 
 ### 2. Configure environment variables
@@ -45,4 +45,6 @@ Open [http://localhost:3000](http://localhost:3000) in your browser.
 | `npm run dev` | Start the development server |
 | `npm run build` | Build for production |
 | `npm run start` | Start the production server |
-| `npm run lint` | Run ESLint |
+| `npm run typecheck` | Check TypeScript types |
+| `npm run lint` | Run Biome static analysis |
+| `npm run test:a11y` | Run Playwright accessibility tests |

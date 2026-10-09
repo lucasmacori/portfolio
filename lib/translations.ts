@@ -36,6 +36,12 @@ const en = {
     network: 'Network',
     contact: 'Contact',
   },
+  links: {
+    eyebrow: 'Links',
+    indexTitle: 'Page repository',
+    openPage: (name: string) => `Open page: ${name}`,
+    openLink: (name: string) => `Open ${name} (opens in a new tab)`,
+  },
   hero: {
     subtitle: 'Full-Stack Developer',
     cta: '[ ENTER PORTFOLIO ]',
@@ -196,6 +202,12 @@ const fr: typeof en = {
     resume: 'CV',
     network: 'Réseau',
     contact: 'Contact',
+  },
+  links: {
+    eyebrow: 'Liens',
+    indexTitle: 'Répertoire de pages',
+    openPage: (name: string) => `Ouvrir la page : ${name}`,
+    openLink: (name: string) => `Ouvrir ${name} (ouvre dans un nouvel onglet)`,
   },
   hero: {
     subtitle: 'Développeur Full-Stack',
