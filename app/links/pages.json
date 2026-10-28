@@ -8,6 +8,13 @@
     "links": [
       {
         "label": {
+          "en": "GIVE YOUR FEEDBACK!",
+          "fr": "DONNEZ VOTRE FEEDBACK !"
+        },
+        "href": "https://openfeedback.io/bU6bXCQQhSZTlc5h1OBi/2026-10-20/Mn5rgJ7QsmM0Wfgriogt"
+      },
+      {
+        "label": {
           "en": "2048 Project",
           "fr": "Projet 2048"
         },
@@ -18,14 +25,7 @@
           "en": "Slides",
           "fr": "Slides"
         },
-        "href": "https://drive.google.com/file/d/1jkbzLi9COmThGmhCuiD3b01bo5sz-w-N/view?usp=share_link"
-      },
-      {
-        "label": {
-          "en": "My website",
-          "fr": "Mon site web"
-        },
-        "href": "https://lucasmacori.fr"
+        "href": "https://drive.google.com/file/d/1Kb9L9ljiwG_Q_a5N-t18E1TpQr82tYvb/view?usp=sharing"
       }
     ]
   }
